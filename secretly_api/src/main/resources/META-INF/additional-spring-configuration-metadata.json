@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.security.private-key",
+      "type": "java.lang.String",
+      "description": "Secret Key used for Encryption. Its used in Password and Secret encryption."
+  }
+] }

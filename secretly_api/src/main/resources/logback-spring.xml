@@ -1,0 +1,30 @@
+<configuration>
+    <property name="LOG_HOME" value="logs"/>
+    <property name="serverIp" value="${SERVER_IP:-127.0.0.1}"/>
+    <property name="serverPort" value="${SERVER_PORT:-8080}"/>
+
+    <!-- File Appender that writes all logs to a file with daily rollover -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Log file will be saved under the 'logs' directory -->
+        <file>${LOG_HOME}/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rollover and keep logs for 7 days -->
+            <fileNamePattern>${LOG_HOME}/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%logger{36}] [${serverIp}:${serverPort}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%logger{36}] [${serverIp}:${serverPort}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
