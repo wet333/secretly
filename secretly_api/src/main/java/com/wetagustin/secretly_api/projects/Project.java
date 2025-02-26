@@ -1,5 +1,6 @@
 package com.wetagustin.secretly_api.projects;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wetagustin.secretly_api.secrets.Secret;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,6 +43,15 @@ public class Project {
         this.name = name;
     }
 
+    public Boolean hasSecret(String secretKey) {
+        for (Secret secret : secrets) {
+            if (secret.getKeyName().equals(secretKey)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Secret addSecret(String keyName, String value) {
         Secret secret = new Secret(keyName, value);
         secret.setProject(this);
@@ -49,10 +59,22 @@ public class Project {
         return secret;
     }
 
-    public void removeSecret(Secret secret) {
-        if (secrets.remove(secret)) {
-            secret.setProject(null);
+    public Secret removeSecret(String keyName) {
+        Secret deletedSecret = null;
+
+        for (Secret secret : this.secrets) {
+            if (secret.getKeyName().equals(keyName)) {
+                deletedSecret = secret;
+                break;
+            }
         }
+
+        if (deletedSecret == null) {
+            throw new EntityNotFoundException("Secret not found with name " + keyName);
+        }
+
+        this.secrets.remove(deletedSecret);
+        return deletedSecret;
     }
 }
 

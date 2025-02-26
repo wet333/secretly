@@ -1,5 +1,6 @@
 package com.wetagustin.secretly_api.secrets;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.wetagustin.secretly_api.projects.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +11,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "secrets")
+@Table(
+        name = "secrets",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uniq_secret_per_project",
+                        columnNames = {"key_name", "project_id"}
+                )
+        }
+)
 public class Secret {
 
     @Id

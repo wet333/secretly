@@ -9,8 +9,8 @@ public class ServiceException extends ApiException {
 
     private final String serviceClassName;
 
-    public ServiceException(Class<?> service, String message) {
+    public ServiceException(String serviceClassName, String message) {
         super(message);
-        this.serviceClassName = service.getSimpleName();
+        this.serviceClassName = serviceClassName;
     }
 }

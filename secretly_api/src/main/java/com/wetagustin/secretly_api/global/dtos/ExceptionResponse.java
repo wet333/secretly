@@ -12,20 +12,20 @@ import java.time.LocalDateTime;
 public class ExceptionResponse {
 
     private LocalDateTime timestamp;
+    private String type;
+    private String title;
     private int status;
-    private String error;
-    private String message;
-    private String path;
+    private String detail;
 
     public ExceptionResponse() {
         this.timestamp = LocalDateTime.now();
     }
 
-    public ExceptionResponse(int status, String error, String message, String path) {
+    public ExceptionResponse(int status, String title, String detail, String type) {
         this(); // No args constructor
         this.status = status;
-        this.error = error;
-        this.message = message;
-        this.path = path;
+        this.title = title;
+        this.detail = detail;
+        this.type = type;
     }
 }

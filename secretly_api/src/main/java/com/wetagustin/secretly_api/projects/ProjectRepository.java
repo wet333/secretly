@@ -4,6 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
     Project findByName(String projectName);
-    Boolean existsByName(String projectName);
     void deleteByName(String projectName);
 }
