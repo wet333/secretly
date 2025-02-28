@@ -1,0 +1,86 @@
+[
+  {
+    "name": "My Project",
+    "secrets": []
+  },
+  {
+    "name": "API Service",
+    "secrets": [
+      {
+        "projectName": "API Service",
+        "keyName": "API_KEY",
+        "value": "sk_live_12345abcdef"
+      },
+      {
+        "projectName": "API Service",
+        "keyName": "DATABASE_URL",
+        "value": "postgres://user:pass@localhost:5432/db"
+      }
+    ]
+  },
+  {
+    "name": "Cloud Deployment",
+    "secrets": [
+      {
+        "projectName": "Cloud Deployment",
+        "keyName": "AWS_ACCESS_KEY",
+        "value": "AKIA1234567890ABCDEF"
+      },
+      {
+        "projectName": "Cloud Deployment",
+        "keyName": "AWS_SECRET_KEY",
+        "value": "abcDEF1234567890ghIJK/lmnOPQrstUVWxyz+"
+      },
+      {
+        "projectName": "Cloud Deployment",
+        "keyName": "AWS_REGION",
+        "value": "us-west-2"
+      },
+      {
+        "projectName": "Cloud Deployment",
+        "keyName": "DOCKER_HUB_TOKEN",
+        "value": "dckr_pat_1234567890abcdefghijklmnopqrstuvwxyz"
+      },
+      {
+        "projectName": "Cloud Deployment",
+        "keyName": "KUBERNETES_CONFIG",
+        "value": "base64encodedkubernetesconfigurationfile=="
+      }
+    ]
+  },
+  {
+    "name": "E-commerce App",
+    "secrets": [
+      {
+        "projectName": "E-commerce App",
+        "keyName": "STRIPE_SECRET_KEY",
+        "value": "sk_live_51AB34CDEFghIJKlmnOPQrstUVWxyz"
+      },
+      {
+        "projectName": "E-commerce App",
+        "keyName": "STRIPE_WEBHOOK_SECRET",
+        "value": "whsec_12345abcdefghijklmnopqrstuvwxyz"
+      },
+      {
+        "projectName": "E-commerce App",
+        "keyName": "MONGODB_URI",
+        "value": "mongodb+srv://user:pass@cluster0.example.mongodb.net/ecommerce"
+      },
+      {
+        "projectName": "E-commerce App",
+        "keyName": "SESSION_SECRET",
+        "value": "super_secure_session_secret_key_123"
+      },
+      {
+        "projectName": "E-commerce App",
+        "keyName": "SENDGRID_API_KEY",
+        "value": "SG.abcdefghijklmnopqrstuvwxyz.1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      },
+      {
+        "projectName": "E-commerce App",
+        "keyName": "REDIS_URL",
+        "value": "redis://user:password@redis-service.com:6379"
+      }
+    ]
+  }
+]
