@@ -1,12 +1,4 @@
 services:
-  frontend:
-    build: ./frontend
-    container_name: secrets_frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-
   backend:
     build: ./secretly_api
     container_name: secrets_backend
