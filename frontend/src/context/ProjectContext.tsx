@@ -38,9 +38,6 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
         const fetchProjects = async () => {
             try {
                 const response = await API.get(API_URL + "projects");
-
-                console.log(response.data);
-
                 const fetchedProjects = response.data.data;
                 setProjects(fetchedProjects);
 
@@ -68,52 +65,72 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     }, [projects, selectedProject?.name]);
 
     // Add functions to manipulate projects and secrets
-    const addProject = (project: Project) => {
-        setProjects([...projects, project]);
+    const addProject = async (project: Project) => {
+        const response = await API.post("/projects", project);
+        if (response?.data.data) {
+            setProjects([...projects, response.data.data]);
+        }
     };
 
-    const addSecret = (projectName: string, secret: Omit<Secret, 'projectName'>) => {
-        const updatedProjects = projects.map(project => {
-            if (project.name === projectName) {
-                return {
-                    ...project,
-                    secrets: [...project.secrets, { ...secret, projectName }]
-                };
-            }
-            return project;
-        });
-        setProjects(updatedProjects);
+    const addSecret = async (projectName: string, secret: Omit<Secret, 'projectName'>) => {
+        const response = await API.post("/secrets/" + projectName, secret);
+
+        if (response.status == 200 && response?.data.data) {
+            const updatedProjects = projects.map(project => {
+                if (project.name === projectName) {
+                    return {
+                        ...project,
+                        secrets: [...project.secrets, {...secret, projectName}]
+                    };
+                }
+                return project;
+            });
+            setProjects(updatedProjects);
+        }
     };
 
-    const updateSecret = (projectName: string, keyName: string, newValue: string) => {
-        const updatedProjects = projects.map(project => {
-            if (project.name === projectName) {
-                return {
-                    ...project,
-                    secrets: project.secrets.map(secret => {
-                        if (secret.keyName === keyName) {
-                            return { ...secret, value: newValue };
-                        }
-                        return secret;
-                    })
-                };
-            }
-            return project;
-        });
-        setProjects(updatedProjects);
+    const updateSecret = async (projectName: string, keyName: string, newValue: string) => {
+        const updatedSecret: Secret = {
+            projectName: projectName,
+            keyName: keyName,
+            value: newValue,
+        };
+        const response = await API.put(`/secrets/${projectName}/${keyName}`, updatedSecret);
+
+        if (response.status == 200 && response?.data.data) {
+            const updatedProjects = projects.map(project => {
+                if (project.name === projectName) {
+                    return {
+                        ...project,
+                        secrets: project.secrets.map(secret => {
+                            if (secret.keyName === keyName) {
+                                return {...secret, value: newValue};
+                            }
+                            return secret;
+                        })
+                    };
+                }
+                return project;
+            });
+            setProjects(updatedProjects);
+        }
     };
 
-    const deleteSecret = (projectName: string, keyName: string) => {
-        const updatedProjects = projects.map(project => {
-            if (project.name === projectName) {
-                return {
-                    ...project,
-                    secrets: project.secrets.filter(secret => secret.keyName !== keyName)
-                };
-            }
-            return project;
-        });
-        setProjects(updatedProjects);
+    const deleteSecret = async (projectName: string, keyName: string) => {
+        const response = await API.delete(`/secrets/${projectName}/${keyName}`);
+
+        if (response.status == 200 && response?.data.data) {
+            const updatedProjects = projects.map(project => {
+                if (project.name === projectName) {
+                    return {
+                        ...project,
+                        secrets: project.secrets.filter(secret => secret.keyName !== keyName)
+                    };
+                }
+                return project;
+            });
+            setProjects(updatedProjects);
+        }
     };
 
     return (

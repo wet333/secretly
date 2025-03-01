@@ -26,6 +26,11 @@ public class SecretService {
     }
 
     public List<SecretDTO> findAllByProject(String projectName) {
+
+        if (!projectRepository.existsByName(projectName)) {
+            throw new EntityNotFoundException("Project " + projectName + " not found");
+        }
+
         Project project = projectRepository.findByName(projectName);
         List<Secret> secrets = secretRepository.findAllByProject(project);
         List<SecretDTO> secretDTOs = new ArrayList<>();
@@ -76,8 +81,8 @@ public class SecretService {
         if (project == null) {
             throw new EntityNotFoundException("Project not found with name: " + projectName);
         }
-        if (project.hasSecret(secretDTO.getKeyName())) {
-            throw new IllegalArgumentException("Secret already exists");
+        if (!project.hasSecret(secretDTO.getKeyName())) {
+            throw new IllegalArgumentException("Secret doesn't exists in project: " + projectName);
         }
 
         if (project.hasSecret(secretName)) {

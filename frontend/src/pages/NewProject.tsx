@@ -4,11 +4,6 @@ import NewProjectForm from "../components/features/projects/NewProjectForm.tsx";
 
 export function NewProject() {
 
-    const handleSecretAdded = () => {
-        // Refresh your secrets list or show notification
-        console.log('Secret added successfully');
-    };
-
     return (
         <Layout>
             <SectionTitle
@@ -16,9 +11,7 @@ export function NewProject() {
                 title="Create project"
                 subtitle={`Create a new project to store all your related secrets.`}
             />
-            <NewProjectForm
-                onSecretAdded={handleSecretAdded}
-            />
+            <NewProjectForm />
         </Layout>
     );
 }

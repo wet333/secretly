@@ -24,7 +24,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ hasBackButton, title, subti
             )}
             <div>
                 <h1 className="text-2xl font-bold">{title}</h1>
-                <p className="text-stone-400 text-sm mt-1">{subtitle}</p>
+                <p className="text-stone-400 text-md mt-1">{subtitle}</p>
             </div>
         </div>
     )

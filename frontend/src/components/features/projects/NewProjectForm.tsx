@@ -4,11 +4,7 @@ import {CircleAlert} from "lucide-react";
 import {useProject} from "../../../hooks/useProjects.tsx";
 import {useNavigate} from "react-router-dom";
 
-interface NewProjectFormProps {
-    onSecretAdded?: () => void;
-}
-
-const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSecretAdded }) => {
+const NewProjectForm: React.FC = () => {
     const [projectName, setProjectName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,26 +24,11 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSecretAdded }) => {
         setError(null);
 
         try {
-            // This is where you'll implement your API call
-            // Example implementation:
-            // await fetch('/api/secrets', {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({ keyName, value }),
-            // });
-
-            // Simulate API call for now
-            await new Promise(resolve => setTimeout(resolve, 500));
-
             addProject({ name: projectName, secrets: [] });
             setSelectedProject({ name: projectName, secrets: [] });
 
             // Clear form after successful submission
             setProjectName('');
-
-            if (onSecretAdded) {
-                onSecretAdded();
-            }
             navigate("/")
         } catch (err) {
             setError('Failed to create new project. Please try again.');

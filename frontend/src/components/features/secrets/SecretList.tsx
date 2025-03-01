@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Lock } from 'lucide-react';
 import SecretListItem from './SecretListItem.tsx';
 import {Secret} from "../../../context/ProjectContext.tsx";
+import {Link} from "react-router-dom";
 
 interface SecretsListProps {
     count: number,
@@ -48,7 +49,9 @@ const SecretList: React.FC<SecretsListProps> = ({ secrets, count }) => {
                 <div className="py-8 text-center text-stone-500">
                     <Lock className="mx-auto h-10 w-10 mb-3 opacity-30" />
                     <p>No secrets found in this project</p>
-                    <button className="mt-3 text-amber-400 text-sm font-medium hover:text-amber-300">Add your first secret</button>
+                    <Link to={"/addSecret"}>
+                        <button className="mt-3 text-amber-400 text-sm font-medium hover:text-amber-300">Add your first secret</button>
+                    </Link>
                 </div>
             )}
         </div>

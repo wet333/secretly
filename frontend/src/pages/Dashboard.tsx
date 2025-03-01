@@ -13,7 +13,7 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold">{selectedProject?.name}</h1>
-                    <p className="text-stone-400 text-sm mt-1">{selectedProject?.secrets.length} secrets stored securely</p>
+                    <p className="text-stone-400 text-md mt-1">{selectedProject?.secrets.length} secrets stored securely</p>
                 </div>
                 <AddSecretButton />
             </div>
