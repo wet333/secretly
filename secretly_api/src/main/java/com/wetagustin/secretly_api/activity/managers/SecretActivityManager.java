@@ -21,7 +21,7 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Added secret" + secretName + " to project  " + projectName);
+        activityInfo.put("message", "Added secret " + secretName + " to project " + projectName);
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
@@ -36,7 +36,7 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Updated secret" + secretName + " in project  " + projectName);
+        activityInfo.put("message", "Updated secret " + secretName + " in project " + projectName);
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
@@ -51,7 +51,7 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Deleted secret" + secretName + " from project  " + projectName);
+        activityInfo.put("message", "Deleted secret " + secretName + " from project " + projectName);
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
