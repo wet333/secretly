@@ -1,5 +1,6 @@
 package com.wetagustin.secretly_api.projects;
 
+import com.wetagustin.secretly_api.activity.managers.ProjectActivityManager;
 import com.wetagustin.secretly_api.global.dtos.SimpleResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +13,13 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final ProjectActivityManager projectActivityManager;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(
+            ProjectService projectService,
+            ProjectActivityManager projectActivityManager) {
         this.projectService = projectService;
+        this.projectActivityManager = projectActivityManager;
     }
 
     @GetMapping
@@ -37,6 +42,7 @@ public class ProjectController {
         response.setMessage("Project created successfully");
         response.setData(ProjectDTO.fromProject(createdProject));
 
+        projectActivityManager.saveProjectCreationActivity(createdProject);
         return ResponseEntity.ok().body(response);
     }
 
@@ -67,6 +73,7 @@ public class ProjectController {
         response.setMessage("Project information updated successfully");
         response.setData(ProjectDTO.fromProject(updatedProject));
 
+        projectActivityManager.saveProjectModificationActivity(Project.fromDTO(projectRequest) , updatedProject);
         return ResponseEntity.ok(response);
     }
 
@@ -79,6 +86,7 @@ public class ProjectController {
         response.setMessage("Project deleted successfully");
         response.setData(projectName);
 
+        projectActivityManager.saveProjectDeletionActivity(projectName);
         return ResponseEntity.ok(response);
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 @Table(name = "projects")
 public class Project {
 
@@ -75,6 +76,10 @@ public class Project {
 
         this.secrets.remove(deletedSecret);
         return deletedSecret;
+    }
+
+    public static Project fromDTO(ProjectDTO projectDTO) {
+        return Project.builder().name(projectDTO.getName()).build();
     }
 }
 

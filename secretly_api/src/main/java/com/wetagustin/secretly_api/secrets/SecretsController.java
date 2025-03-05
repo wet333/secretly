@@ -1,5 +1,6 @@
 package com.wetagustin.secretly_api.secrets;
 
+import com.wetagustin.secretly_api.activity.managers.SecretActivityManager;
 import com.wetagustin.secretly_api.global.dtos.SimpleResponse;
 import com.wetagustin.secretly_api.projects.Project;
 import com.wetagustin.secretly_api.projects.ProjectDTO;
@@ -16,9 +17,11 @@ import java.util.List;
 public class SecretsController {
 
     private final SecretService secretService;
+    private final SecretActivityManager secretActivityManager;
 
-    public SecretsController(SecretService secretService) {
+    public SecretsController(SecretService secretService,  SecretActivityManager secretActivityManager) {
         this.secretService = secretService;
+        this.secretActivityManager = secretActivityManager;
     }
 
     @GetMapping("/{projectName}")
@@ -42,6 +45,7 @@ public class SecretsController {
         response.setMessage("Secret added successfully");
         response.setData(ProjectDTO.fromProject(updatedProject));
 
+        secretActivityManager.saveSecretCreationActivity(projectName, secretDTO.getKeyName());
         return ResponseEntity.ok(response);
     }
 
@@ -58,6 +62,7 @@ public class SecretsController {
         response.setMessage("Secret updated successfully");
         response.setData(ProjectDTO.fromProject(modProject));
 
+        secretActivityManager.saveSecretUpdateActivity(projectName, secretName);
         return ResponseEntity.ok(response);
     }
 
@@ -73,6 +78,7 @@ public class SecretsController {
         response.setMessage("Secret deleted successfully");
         response.setData(ProjectDTO.fromProject(modProject));
 
+        secretActivityManager.saveSecretDeleteActivity(projectName, secretName);
         return ResponseEntity.ok(response);
     }
 
