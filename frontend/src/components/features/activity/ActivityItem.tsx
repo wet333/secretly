@@ -1,6 +1,7 @@
 import React from 'react';
 import {Edit, Plus, Trash2} from 'lucide-react';
 import {ActivityNotification} from "./../../../context/ActivityContext.tsx";
+import {timeAgo} from "../../../lib/utils/dates.ts";
 
 interface ActivityItemProps {
     activity: ActivityNotification
@@ -8,45 +9,42 @@ interface ActivityItemProps {
 
 const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
     const getIcon = () => {
-        switch(activity.type) {
-            case 'edit':
+        switch(activity.activityAction) {
+            case 'UPDATE':
                 return <Edit size={14} />;
-            case 'add':
+            case 'CREATE':
                 return <Plus size={14} />;
-            case 'delete':
+            case 'DELETE':
                 return <Trash2 size={14} />;
             default:
-                return <Edit size={14} />;
+                return <Plus size={14} />;
         }
     };
 
     const getMessage = () => {
-        switch(activity.type) {
-            case 'edit':
-                return (
-                    <p className="text-sm">
-                        <span className="font-medium">{activity.secretName}</span> was updated in <span className="text-amber-400">{activity.projectName}</span>
-                    </p>
-                );
-            case 'add':
-                return (
-                    <p className="text-sm">
-                        <span className="font-medium">{activity.secretName}</span> was added to <span className="text-amber-400">{activity.projectName}</span>
-                    </p>
-                );
-            case 'delete':
-                return (
-                    <p className="text-sm">
-                        <span className="font-medium">{activity.secretName}</span> was deleted from <span className="text-amber-400">{activity.projectName}</span>
-                    </p>
-                );
-            default:
-                return (
-                    <p className="text-sm">
-                        <span className="font-medium">{activity.secretName}</span> was modified in <span className="text-amber-400">{activity.projectName}</span>
-                    </p>
-                );
-        }
+        const message = activity.activityInfo?.message;
+        const words: string[] = message.split(/(\s+)/);
+
+        // Process each word, checking if it matches any property values in activityInfo
+        const processedMessage = words.map((word: string, index: number) => {
+            const matchingKey = Object.entries(activity.activityInfo)
+                .find(([key, value]) => {
+                    return key != "message" && typeof value === "string" && value.includes(word)
+                });
+
+            if (matchingKey) {
+                return <span key={index} className="font-semibold text-amber-400">{word}</span>;
+            } else {
+                return word;
+            }
+        });
+
+        return (
+            <p className="text-sm">
+                {processedMessage}
+                <span className={"ml-[0.5px]"} >.</span>
+            </p>
+        );
     };
 
     return (
@@ -56,7 +54,7 @@ const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
             </div>
             <div className="flex-1">
                 {getMessage()}
-                <p className="text-xs text-stone-500 mt-1">{activity.timeAgo}</p>
+                <p className="text-xs text-stone-500 mt-1">{timeAgo(activity.createdAt)}</p>
             </div>
         </div>
     );

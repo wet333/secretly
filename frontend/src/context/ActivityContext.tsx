@@ -1,12 +1,16 @@
-import React, {Context, createContext, ReactNode, useState} from "react";
-import initialActivities from "./../dummyData/recent_activity.json";
+import React, {Context, createContext, ReactNode, useContext, useState} from "react";
+import API from "../lib/api.ts";
+import {ProjectContext, ProjectContextType} from "./ProjectContext.tsx";
+
+type ActivityAction = "CREATE" | "UPDATE" | "DELETE";
+type ActivityInfo = Record<string, string>;
 
 export interface ActivityNotification {
     id: number,
-    type: string,
-    secretName: string,
-    projectName: string,
-    timeAgo: string,
+    createdAt: string,
+    activityType: string,
+    activityAction: ActivityAction,
+    activityInfo: ActivityInfo[],
 }
 
 export interface ActivityContextType {
@@ -21,7 +25,22 @@ interface ActivityContextProviderProps {
 }
 
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({children}) => {
-    const [activities, setActivities] = useState<ActivityNotification[]>([...initialActivities]);
+    const [activities, setActivities] = useState<ActivityNotification[]>([]);
+    const { selectedProject, projects } = useContext(ProjectContext) as ProjectContextType;
+
+    React.useEffect(() => {
+        const fetchActivities = async () => {
+            try {
+                const response = await API.get(`/activity`);
+                if (response.status === 200 && response?.data.data) {
+                    setActivities(response.data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchActivities();
+    }, [selectedProject, projects]);
 
     return (
         <ActivityContext.Provider value={{

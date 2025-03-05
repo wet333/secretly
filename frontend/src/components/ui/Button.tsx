@@ -44,7 +44,7 @@ const Button: React.FC<ButtonProps> = ({
         danger: "bg-red-600/80 text-white hover:bg-red-700",
         icon: "bg-transparent text-stone-400 hover:bg-stone-700 hover:text-amber-400 p-1.5 rounded",
         iconColor: "bg-transparent text-amber-400 border border-amber-400/25 hover:bg-stone-800 hover:border-amber-400/50",
-        iconDanger: "bg-transparent text-stone-400 hover:bg-stone-700 hover:text-red-400 p-1.5 rounded"
+        iconDanger: "bg-transparent text-stone-400 hover:border-red-500 hover:text-red-500 p-1.5 rounded"
     };
 
     // Define size classes

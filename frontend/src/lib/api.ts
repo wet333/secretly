@@ -1,5 +1,5 @@
 import axios, {Axios} from "axios";
-import {API_ADMIN_PASSWORD, API_ADMIN_USERNAME, API_URL_DEV} from "../constants.ts";
+import {API_ADMIN_PASSWORD, API_ADMIN_USERNAME, API_URL_DEV} from "./constants.ts";
 
 const API: Axios = axios.create({
     baseURL: API_URL_DEV,

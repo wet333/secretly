@@ -1,6 +1,6 @@
 import React, {createContext, ReactNode, useState} from 'react';
-import {API_URL} from "../constants.ts";
-import API from "../api/api.ts";
+import {API_URL} from "../lib/constants.ts";
+import API from "../lib/api.ts";
 
 export interface Project {
     name: string;
@@ -18,6 +18,7 @@ export interface ProjectContextType {
     selectedProject: Project | null,
     setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>,
     addProject: (project: Project) => void,
+    deleteProject: (project: Project) => void,
     addSecret: (projectName: string, secret: Omit<Secret, 'projectName'>) => void,
     updateSecret: (projectName: string, keyName: string, newValue: string) => void,
     deleteSecret: (projectName: string, keyName: string) => void,
@@ -34,20 +35,23 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-    React.useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await API.get(API_URL + "projects");
+    const fetchProjects = async () => {
+        try {
+            const response = await API.get(API_URL + "projects");
+            if (response.status === 200 && response.data.data) {
                 const fetchedProjects = response.data.data;
                 setProjects(fetchedProjects);
 
                 if (fetchedProjects.length > 0 && !selectedProject) {
                     setSelectedProject(fetchedProjects[0]);
                 }
-            } catch (err) {
-                console.log(err);
             }
-        };
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    React.useEffect(() => {
         fetchProjects();
     }, []);
 
@@ -67,15 +71,26 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     // Add functions to manipulate projects and secrets
     const addProject = async (project: Project) => {
         const response = await API.post("/projects", project);
-        if (response?.data.data) {
+        if (response.status === 200 && response?.data.data) {
             setProjects([...projects, response.data.data]);
         }
     };
 
+    const deleteProject = async (project: Project) => {
+        {/* TODO: Add custom confirmation modal */}
+        const proceed = window.confirm("Are you sure you want to delete this project?");
+        if (proceed) {
+            const response = await API.delete(`/projects/${project.name}`);
+            if (response.status === 200 && response?.data.data) {
+                await fetchProjects();
+            }
+        }
+    }
+
     const addSecret = async (projectName: string, secret: Omit<Secret, 'projectName'>) => {
         const response = await API.post("/secrets/" + projectName, secret);
 
-        if (response.status == 200 && response?.data.data) {
+        if (response.status === 200 && response?.data.data) {
             const updatedProjects = projects.map(project => {
                 if (project.name === projectName) {
                     return {
@@ -97,7 +112,7 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
         };
         const response = await API.put(`/secrets/${projectName}/${keyName}`, updatedSecret);
 
-        if (response.status == 200 && response?.data.data) {
+        if (response.status === 200 && response?.data.data) {
             const updatedProjects = projects.map(project => {
                 if (project.name === projectName) {
                     return {
@@ -117,19 +132,22 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     };
 
     const deleteSecret = async (projectName: string, keyName: string) => {
-        const response = await API.delete(`/secrets/${projectName}/${keyName}`);
+        const proceed = window.confirm("Are you sure you want to delete this project?");
 
-        if (response.status == 200 && response?.data.data) {
-            const updatedProjects = projects.map(project => {
-                if (project.name === projectName) {
-                    return {
-                        ...project,
-                        secrets: project.secrets.filter(secret => secret.keyName !== keyName)
-                    };
-                }
-                return project;
-            });
-            setProjects(updatedProjects);
+        if (proceed) {
+            const response = await API.delete(`/secrets/${projectName}/${keyName}`);
+            if (response.status === 200 && response?.data.data) {
+                const updatedProjects = projects.map(project => {
+                    if (project.name === projectName) {
+                        return {
+                            ...project,
+                            secrets: project.secrets.filter(secret => secret.keyName !== keyName)
+                        };
+                    }
+                    return project;
+                });
+                setProjects(updatedProjects);
+            }
         }
     };
 
@@ -139,6 +157,7 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
             selectedProject,
             setSelectedProject,
             addProject,
+            deleteProject,
             addSecret,
             updateSecret,
             deleteSecret

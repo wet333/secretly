@@ -2,10 +2,10 @@ package com.wetagustin.secretly_api.activity.managers;
 
 import com.wetagustin.secretly_api.activity.Activity;
 import com.wetagustin.secretly_api.activity.ActivityService;
+import com.wetagustin.secretly_api.global.Utils;
 import com.wetagustin.secretly_api.projects.Project;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class ProjectActivityManager {
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)
                 .activityAction(Activity.ActivityAction.CREATE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }
@@ -35,13 +35,13 @@ public class ProjectActivityManager {
     public void saveProjectDeletionActivity(String projectName) {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
-        activityInfo.put("message", "Project " + projectName + " has been deleted.");
+        activityInfo.put("message", "Project " + projectName + " has been deleted");
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)
                 .activityAction(Activity.ActivityAction.DELETE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }
@@ -55,7 +55,7 @@ public class ProjectActivityManager {
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)
                 .activityAction(Activity.ActivityAction.UPDATE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }

@@ -2,6 +2,7 @@ package com.wetagustin.secretly_api.activity.managers;
 
 import com.wetagustin.secretly_api.activity.Activity;
 import com.wetagustin.secretly_api.activity.ActivityService;
+import com.wetagustin.secretly_api.global.Utils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class SecretActivityManager {
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
                 .activityAction(Activity.ActivityAction.CREATE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }
@@ -42,7 +43,7 @@ public class SecretActivityManager {
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
                 .activityAction(Activity.ActivityAction.UPDATE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }
@@ -57,7 +58,7 @@ public class SecretActivityManager {
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
                 .activityAction(Activity.ActivityAction.DELETE)
                 .activityInfo(activityInfo)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Utils.now())
                 .build()
         );
     }

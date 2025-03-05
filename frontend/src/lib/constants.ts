@@ -1,5 +1,5 @@
 export const APP_NAME: string = "Secretly";
-export const APP_VERSION: string = "1.0";
+export const ADMIN_NAME: string = "Agustin Wet";
 export const LOGO_TITLE: string = APP_NAME;
 
 export const API_URL_DEV: string = "http://localhost:8080/api/";
