@@ -2,10 +2,10 @@ package com.wetagustin.secretly_api.activity.managers;
 
 import com.wetagustin.secretly_api.activity.Activity;
 import com.wetagustin.secretly_api.activity.ActivityService;
+import com.wetagustin.secretly_api.activity.ActivityUtils;
 import com.wetagustin.secretly_api.global.Utils;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +22,11 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Added secret " + secretName + " to project " + projectName);
+        activityInfo.put(
+                "message",
+                "Secret " + ActivityUtils.placeholderForKey("secretName") + " created on project " +
+                ActivityUtils.placeholderForKey("projectName")
+        );
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
@@ -37,7 +41,11 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Updated secret " + secretName + " in project " + projectName);
+        activityInfo.put(
+                "message",
+                "Updated secret " + ActivityUtils.placeholderForKey("secretName") + " from project " +
+                ActivityUtils.placeholderForKey("projectName")
+        );
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)
@@ -52,7 +60,11 @@ public class SecretActivityManager {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
         activityInfo.put("secretName", secretName);
-        activityInfo.put("message", "Deleted secret " + secretName + " from project " + projectName);
+        activityInfo.put(
+                "message",
+                "Deleted secret " + ActivityUtils.placeholderForKey("secretName") + " from project " +
+                ActivityUtils.placeholderForKey("projectName")
+        );
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.SECRET_ACTIVITY)

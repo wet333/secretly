@@ -1,0 +1,27 @@
+.loader-svg {
+    animation: rotate 2s linear infinite;
+    transform-origin: center center;
+}
+
+.loader-circle {
+    animation: dash 1.5s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 113;  /* circleCircumference for r=18 */
+    }
+    50% {
+        stroke-dashoffset: 28;   /* smaller arc (choose a nice fraction) */
+    }
+    100% {
+        stroke-dashoffset: 113;
+    }
+}

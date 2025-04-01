@@ -2,6 +2,7 @@ package com.wetagustin.secretly_api.activity.managers;
 
 import com.wetagustin.secretly_api.activity.Activity;
 import com.wetagustin.secretly_api.activity.ActivityService;
+import com.wetagustin.secretly_api.activity.ActivityUtils;
 import com.wetagustin.secretly_api.global.Utils;
 import com.wetagustin.secretly_api.projects.Project;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class ProjectActivityManager {
     public void saveProjectCreationActivity(Project createdProject) {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", createdProject.getName());
-        activityInfo.put("message", "Project " + createdProject.getName()  + " has been created");
+        activityInfo.put("message", "Project " + ActivityUtils.placeholderForKey("projectName") + " has been created");
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)
@@ -35,7 +36,7 @@ public class ProjectActivityManager {
     public void saveProjectDeletionActivity(String projectName) {
         Map<String, String> activityInfo = new HashMap<>();
         activityInfo.put("projectName", projectName);
-        activityInfo.put("message", "Project " + projectName + " has been deleted");
+        activityInfo.put("message", "Project " + ActivityUtils.placeholderForKey("projectName") + " has been deleted");
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)
@@ -48,8 +49,12 @@ public class ProjectActivityManager {
 
     public void saveProjectModificationActivity(Project originalProject, Project modifiedProject) {
         Map<String, String> activityInfo = new HashMap<>();
-        activityInfo.put("projectName", modifiedProject.getName());
-        activityInfo.put("message", "Project renamed to " + modifiedProject.getName() + " from " + originalProject.getName());
+        activityInfo.put("oldProjectNAme", originalProject.getName());
+        activityInfo.put("newProjectName", modifiedProject.getName());
+        activityInfo.put("message",
+                "Project " + ActivityUtils.placeholderForKey("oldProjectName") + " renamed to " +
+                ActivityUtils.placeholderForKey("newProjectName")
+        );
 
         activityService.saveActivity(Activity.builder()
                 .activityType(Activity.ActivityType.PROJECT_ACTIVITY)

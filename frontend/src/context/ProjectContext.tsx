@@ -53,7 +53,7 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
 
     React.useEffect(() => {
         fetchProjects();
-    }, []);
+    });
 
     // Needed this to sync the secretList when modified
     React.useEffect(() => {
@@ -66,7 +66,7 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
                 setSelectedProject(projects[0]);
             }
         }
-    }, [projects, selectedProject?.name]);
+    }, [projects, selectedProject, selectedProject?.name]);
 
     // Add functions to manipulate projects and secrets
     const addProject = async (project: Project) => {

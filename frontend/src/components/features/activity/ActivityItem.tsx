@@ -1,6 +1,6 @@
 import React from 'react';
 import {Edit, Plus, Trash2} from 'lucide-react';
-import {ActivityNotification} from "./../../../context/ActivityContext.tsx";
+import {ActivityInfo, ActivityNotification} from "./../../../context/ActivityContext.tsx";
 import {timeAgo} from "../../../lib/utils/dates.ts";
 
 interface ActivityItemProps {
@@ -21,27 +21,42 @@ const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
         }
     };
 
-    const getMessage = () => {
-        const message = activity.activityInfo?.message;
-        const words: string[] = message.split(/(\s+)/);
+    // Takes the activity status message and replaces all placeholders with their values
+    const buildMsg = (template: string, activityInfo: ActivityInfo): React.ReactNode[] => {
+        const parts: React.ReactNode[] = [];
+        let lastIndex = 0;
+        const regex = /{(.*?)}/g;
+        let match: RegExpExecArray | null;
 
-        // Process each word, checking if it matches any property values in activityInfo
-        const processedMessage = words.map((word: string, index: number) => {
-            const matchingKey = Object.entries(activity.activityInfo)
-                .find(([key, value]) => {
-                    return key != "message" && typeof value === "string" && value.includes(word)
-                });
+        while ((match = regex.exec(template)) !== null) {
+            const [placeholder, key] = match;
+            const index = match.index;
 
-            if (matchingKey) {
-                return <span key={index} className="font-semibold text-amber-400">{word}</span>;
-            } else {
-                return word;
+            if (index > lastIndex) {
+                parts.push(template.slice(lastIndex, index));
             }
-        });
+
+            if (activityInfo[key] !== undefined) {
+                parts.push(<span key={index} className="font-semibold text-amber-400">{activityInfo[key]}</span>);
+            } else {
+                parts.push(placeholder);
+            }
+            lastIndex = index + placeholder.length;
+        }
+
+        if (lastIndex < template.length) {
+            parts.push(template.slice(lastIndex));
+        }
+        return parts;
+    }
+
+    const getMessage = () => {
+        const message: string = activity.activityInfo?.message;
+        const activityData = activity.activityInfo;
 
         return (
             <p className="text-sm">
-                {processedMessage}
+                {buildMsg(message, activityData)}
                 <span className={"ml-[0.5px]"} >.</span>
             </p>
         );
