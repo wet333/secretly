@@ -34,8 +34,7 @@
    - Edit the .env.example and rename it to .env, there you can config the application
    - Run the build_script.ps1 file, this will package the backend using the environment variables defined before (NOTE: execute it every time you change the backend code)
    - Run the docker-compose.yml file at the root of the project, this will
-   - Run "npm run dev" inside the /frontend directory, this will start a dev server with
-   - 
+   - Run "npm run dev" inside the /frontend directory, this will start the Vite dev server.
 
 ### User guide
 
