@@ -9,10 +9,10 @@ import {Link} from "react-router-dom";
 import Loader from "../components/ui/Loader.tsx";
 
 const Dashboard = () => {
-    const { projects, selectedProject, deleteProject } = useContext(ProjectContext) as ProjectContextType;
+    const { projects, initialized, selectedProject, deleteProject } = useContext(ProjectContext) as ProjectContextType;
 
     const projectCount = projects?.length ?? 0;
-    const noProjects: boolean = (projectCount == 0);
+    const noProjects: boolean = projectCount === 0;
     const noProjectSubtitle = "Create your first project to get started";
     const projectSubtitle = selectedProject?.secrets?.length + " secrets stored securely";
 
@@ -22,14 +22,13 @@ const Dashboard = () => {
 
     return (
         <>
-            {noProjects && (
+            {!initialized ? (
                 <Layout>
                     <div className="flex justify-center my-4">
                         <Loader />
                     </div>
                 </Layout>
-            )}
-            {!noProjects && (
+            ) : (
                 <Layout>
                     <div className="flex justify-between items-center mb-6">
                         <div>
@@ -59,7 +58,7 @@ const Dashboard = () => {
                         )}
                     </div>
                     {selectedProject && (
-                        <SecretList count={selectedProject.secrets.length} secrets={selectedProject.secrets} />
+                            <SecretList count={selectedProject.secrets.length} secrets={selectedProject.secrets} />
                     )}
                     <ActivityList />
                 </Layout>

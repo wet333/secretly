@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useState} from 'react';
+import React, {createContext, ReactNode, useState, useEffect} from 'react';
 import {API_URL} from "../lib/constants.ts";
 import API from "../lib/api.ts";
 
@@ -15,6 +15,7 @@ export interface Secret {
 
 export interface ProjectContextType {
     projects: Project[],
+    initialized: boolean,
     selectedProject: Project | null,
     setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>,
     addProject: (project: Project) => void,
@@ -33,6 +34,7 @@ interface ProjectProviderProps {
 
 export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     const [projects, setProjects] = useState<Project[]>([]);
+    const [initialized, setInitialized] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     const fetchProjects = async () => {
@@ -51,12 +53,12 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
         }
     };
 
-    React.useEffect(() => {
-        fetchProjects();
-    });
+    useEffect(() => {
+        fetchProjects().then(() => { setInitialized(true)})
+    }, []);
 
     // Needed this to sync the secretList when modified
-    React.useEffect(() => {
+    useEffect(() => {
         if (selectedProject) {
             const currentProject = projects.find(p => p.name === selectedProject.name);
             if (currentProject) {
@@ -154,6 +156,7 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     return (
         <ProjectContext.Provider value={{
             projects,
+            initialized,
             selectedProject,
             setSelectedProject,
             addProject,

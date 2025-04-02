@@ -67,8 +67,10 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         // React Vite app
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "http://127.0.0.1:5173"
+                "http://localhost:5173",    // Vite dev server
+                "http://127.0.0.1:5173",
+                "http://localhost:4173",    // Vite preview server
+                "http://127.0.0.1:4173"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

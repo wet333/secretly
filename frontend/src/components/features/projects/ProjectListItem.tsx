@@ -8,7 +8,7 @@ interface ProjectListItemProps {
 
 const ProjectListItem: React.FC<ProjectListItemProps> = ({ project }) => {
     const { selectedProject, setSelectedProject } = useContext(ProjectContext) as ProjectContextType;
-    const isSelected = selectedProject.name === project.name;
+    const isSelected = selectedProject?.name === project.name;
 
     return (
         <button
