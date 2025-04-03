@@ -1,0 +1,46 @@
+# Works on Coolify
+
+services:
+  frontend:
+    image: 'wetagustin/secretly_frontend:v1.0.2'
+    container_name: secretly_frontend
+    environment:
+      # The backend API_URL, don't use the service name, it doesn't work.
+      - API_URL=http://YOUR_HOST_IP:BACKEND_PORT/api/
+    ports:
+      # Whatever port you want to use PORT:80
+      - '9000:80'
+    depends_on:
+      - backend
+  backend:
+    image: 'wetagustin/secretly_api:v1.0.2'
+    container_name: secretly_backend
+    environment:
+      - API_SECRET=randomsecretfortestingencryption
+      - DB_HOST=db_host
+      - DB_NAME=db_name
+      - DB_USER=db_user
+      - DB_PASS=db_pass
+      - DB_DLL_MODE=update # Use 'create-drop' for a brand-new database, 'update' for already existing schema
+      - LOGGING_LEVEL=TRACE
+      - CORS_HOST=frontend_host
+    ports:
+      # Whatever port you want to use PORT:8080
+      - '9001:8080'
+#    depends_on:
+#      - db
+#
+#  db:
+#    image: postgres:16
+#    container_name: secrets_db
+#    environment:
+#      POSTGRES_USER: ${DB_USER}
+#      POSTGRES_PASSWORD: ${DB_PASS}
+#      POSTGRES_DB: ${DB_NAME}
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
+#
+#volumes:
+#  postgres_data:

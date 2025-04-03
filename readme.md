@@ -31,11 +31,9 @@
 
 ### Developer guide
 
-   - Edit the .env.example and rename it to .env, there you can config the application
-   - Run the build_script.ps1 file, this will package the backend using the environment variables defined before (NOTE: execute it every time you change the backend code)
-   - Run the docker-compose.yml file at the root of the project, this will
-   - Run "npm run dev" inside the /frontend directory, this will start the Vite dev server.
+   - Run `script_build_dev.ps1`, this will start the backend server in a container, and then run `npm run dev` inside the `/frontend` directory.<br><br>
+   - For testing the (built) frontend, backend before building the images for DockerHub run `script_build_prod.ps1`.
 
 ### User guide
 
-***TO-DO: Make the application run by docker compose. Dockerize frontend and backend, upload to docker-hub***
+   - Just run the `docker-compose-user.yml` file. Replace database connection variables. You can copy and paste the file contents on Coolify.

@@ -1,8 +1,8 @@
 import axios, {Axios} from "axios";
-import {API_ADMIN_PASSWORD, API_ADMIN_USERNAME, API_URL_DEV} from "./constants.ts";
+import {API_ADMIN_PASSWORD, API_ADMIN_USERNAME, API_URL} from "./constants.ts";
 
 const API: Axios = axios.create({
-    baseURL: API_URL_DEV,
+    baseURL: API_URL,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json"

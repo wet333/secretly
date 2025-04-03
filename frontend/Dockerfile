@@ -1,5 +1,5 @@
 # ------------------------------------------------
-# Stage 1: Build the React app with Node
+# Stage 1: Build the Vite + React app with Node
 # ------------------------------------------------
 FROM node:18 AS build
 WORKDIR /app
@@ -7,18 +7,25 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the frontend source code
 COPY . .
 
-# Build for production -> output goes to /app/build
+# Build for production -> output goes to /app/dist because of Vite
 RUN npm run build
 
 # ------------------------------------------------
 # Stage 2: Serve with NGINX
 # ------------------------------------------------
 FROM nginx:1.23-alpine
+
+# Install envsubst
+RUN apk add --no-cache gettext
+
 # Copy build folder to NGINX html directory
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Expose NGINX default port
 EXPOSE 80
