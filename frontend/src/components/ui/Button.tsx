@@ -41,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
         secondary: "bg-stone-700 text-amber-50 hover:bg-stone-600",
         ghost: "bg-transparent text-amber-400 hover:bg-stone-800 hover:text-amber-300",
         outline: "bg-transparent border border-stone-700 text-amber-50 hover:bg-stone-800",
-        danger: "bg-red-600/80 text-white hover:bg-red-700",
+        danger: "bg-red-800 text-white hover:bg-red-700",
         icon: "bg-transparent text-stone-400 hover:bg-stone-700 hover:text-amber-400 p-1.5 rounded",
         iconColor: "bg-transparent text-amber-400 border border-amber-400/25 hover:bg-stone-800 hover:border-amber-400/50",
         iconDanger: "bg-transparent text-stone-400 hover:border-red-500 hover:text-red-500 p-1.5 rounded"

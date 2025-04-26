@@ -1,6 +1,5 @@
 package com.wetagustin.secretly_api.projects;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wetagustin.secretly_api.secrets.Secret;
 import jakarta.persistence.*;
 import lombok.*;

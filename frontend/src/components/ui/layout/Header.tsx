@@ -1,9 +1,12 @@
 import { Shield, Settings } from 'lucide-react';
-import React from "react";
+import React, {useContext} from "react";
 import Button from "../Button.tsx";
 import {ADMIN_NAME, LOGO_TITLE} from "../../../lib/constants.ts";
+import {AppGlobalContext} from "../../../context/AppGlobalContext.tsx";
 
 const Header : React.FC = () => {
+
+    const { toggleModalVisibility } = useContext(AppGlobalContext)!;
 
     const extractInitials = (input: string): string => {
         if (!input || input.trim() === '') {
@@ -29,6 +32,7 @@ const Header : React.FC = () => {
                         className={"rounded-full cursor-pointer"}
                         icon={<Settings size={24} />}
                         iconPosition="left"
+                        onClick={toggleModalVisibility}
                     />
                     <div className="h-8 w-8 rounded-full bg-gradient-to-r from-amber-600 to-amber-400 flex items-center justify-center">
                         <span className="text-sm font-medium text-stone-900">{extractInitials(ADMIN_NAME)}</span>
