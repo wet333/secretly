@@ -18,7 +18,7 @@ const ProjectListItem: React.FC<ProjectListItemProps> = ({ project }) => {
             <div className="grid w-full h-4 grid-cols-[18px_1fr_auto] items-center content-center">
                 <Lock size={14} className={`${isSelected ? 'text-amber-400' : 'text-stone-500'}`} />
                 <span className="block whitespace-nowrap overflow-hidden text-ellipsis text-left pl-1 text-sm font-medium">{project.name}</span>
-                <span className="h-fit px-2 py-0.5 text-xs font-bold bg-amber-400 text-stone-950 rounded-full">{project.secrets.length}</span>
+                <span className="h-fit px-2 ml-2 py-0.5 text-xs font-bold bg-amber-400 text-stone-950 rounded-full">{project.secrets.length}</span>
             </div>
         </button>
     );
