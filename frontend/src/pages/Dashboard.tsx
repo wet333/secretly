@@ -30,13 +30,13 @@ const Dashboard = () => {
                 </Layout>
             ) : (
                 <Layout>
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="grid grid-cols-[1fr_auto] mb-6">
                         <div>
                             <h1 className="text-2xl font-bold">{noProjects ? "No projects yet" : selectedProject?.name}</h1>
                             <p className="text-stone-400 text-md mt-2">{noProjects ? noProjectSubtitle : projectSubtitle}</p>
                         </div>
                         {!noProjects && selectedProject && (
-                            <div className="flex items-center gap-x-2">
+                            <div className="flex items-start ml-4 mt-1 gap-x-2">
                                 <Button
                                     variant={"iconDanger"}
                                     icon={<Trash2 size={18}/>}
