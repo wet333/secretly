@@ -1,34 +1,39 @@
 import { FC } from 'react';
-import './Loader.css'; // import your CSS here
+import './Loader.css';
 
 interface LoaderProps {
     color?: string;
     size?: number;
+    label?: string;
 }
 
 const circleRadius = 18;
 const circleCircumference = 2 * Math.PI * circleRadius;
 
-const Loader: FC<LoaderProps> = ({ color = '#e6a803', size = 40 }) => {
+const Loader: FC<LoaderProps> = ({ color = '#d97706', size = 40, label = 'Loading…' }) => {
     return (
-        <svg
-            className="loader-svg"
-            width={size}
-            height={size}
-            viewBox="0 0 40 40"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <circle
-                className="loader-circle"
-                cx="20"
-                cy="20"
-                r={circleRadius}
-                fill="none"
-                stroke={color}
-                strokeWidth={4}
-                strokeDasharray={circleCircumference}
-            />
-        </svg>
+        <div role="status" aria-live="polite" className="flex flex-col items-center gap-3">
+            <svg
+                className="loader-svg"
+                width={size}
+                height={size}
+                viewBox="0 0 40 40"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+            >
+                <circle
+                    className="loader-circle"
+                    cx="20"
+                    cy="20"
+                    r={circleRadius}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth={4}
+                    strokeDasharray={circleCircumference}
+                />
+            </svg>
+            <span className="sr-only">{label}</span>
+        </div>
     );
 };
 

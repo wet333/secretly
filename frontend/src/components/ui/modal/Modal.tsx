@@ -1,5 +1,7 @@
 import React, { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { X } from "lucide-react";
+import Button from "../Button.tsx";
 
 interface ModalProps {
     isOpen: boolean,
@@ -33,31 +35,53 @@ export const Modal: React.FC<ModalProps> = ({
         }
     }, [isOpen])
 
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
 
     const modalRoot = document.getElementById('modal-root')!;
     return createPortal(
         <div
-            className="fixed inset-0 flex items-center justify-center z-50"
+            className="fixed inset-0 flex items-center justify-center z-50 p-4"
             role="dialog"
             aria-modal="true"
+            aria-labelledby={title ? 'modal-title' : undefined}
         >
-            {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black opacity-50"
+                className="absolute inset-0 bg-stone-950/70 backdrop-blur-sm"
                 onClick={onClose}
+                aria-hidden="true"
             />
 
-            {/* Modal Content */}
             <div
-                className={`relative bg-stone-900 text-amber-50 rounded-lg shadow-lg px-6 pt-4 pb-1 ${sizeClasses[size]}`}
+                className={`relative card w-full ${sizeClasses[size]} overscroll-contain shadow-2xl shadow-black/40`}
             >
-                {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}
-                <div className="mb-4">
+                <div className="flex items-start justify-between px-6 pt-5 pb-0">
+                    {title && (
+                        <h2 id="modal-title" className="text-lg font-semibold text-stone-100">
+                            {title}
+                        </h2>
+                    )}
+                    <Button
+                        variant="icon"
+                        className="ml-auto -mr-1 -mt-1"
+                        aria-label="Close dialog"
+                        icon={<X size={18} aria-hidden="true" />}
+                        onClick={onClose}
+                    />
+                </div>
+                <div className="px-6 py-4 text-stone-300">
                     {children}
                 </div>
                 {actions && (
-                    <div className="flex justify-end space-x-2">
+                    <div className="flex justify-end gap-2 px-6 pb-5">
                         {actions}
                     </div>
                 )}

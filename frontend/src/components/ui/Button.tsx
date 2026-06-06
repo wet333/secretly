@@ -19,60 +19,56 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: React.FC<ButtonProps> = ({
-                                           children,
-                                           variant = 'default',
-                                           size = 'md',
-                                           icon,
-                                           iconPosition = 'left',
-                                           className = '',
-                                           fullWidth = false,
-                                           disabled = false,
-                                           type = 'button',
-                                           onClick,
-                                           ...props
-                                       }) => {
-    // Define base classes
-    const baseClasses = "rounded font-medium transition-all focus:outline-none focus:ring-2 focus:ring-amber-500/30 inline-flex items-center justify-center";
+    children,
+    variant = 'default',
+    size = 'md',
+    icon,
+    iconPosition = 'left',
+    className = '',
+    fullWidth = false,
+    disabled = false,
+    type = 'button',
+    onClick,
+    ...props
+}) => {
+    const baseClasses = [
+        'inline-flex items-center justify-center rounded-lg font-medium touch-manipulation',
+        'transition-[background-color,border-color,color,box-shadow,opacity] duration-150 ease-out',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950',
+    ].join(' ');
 
-    // Define variant classes
     const variantClasses: Record<ButtonVariant, string> = {
-        default: "bg-stone-800 text-amber-50 hover:bg-stone-700",
-        primary: "bg-gradient-to-r from-amber-600 to-amber-400 hover:from-amber-700 hover:to-amber-500 text-stone-900 shadow-lg shadow-amber-900/10",
-        secondary: "bg-stone-700 text-amber-50 hover:bg-stone-600",
-        ghost: "bg-transparent text-amber-400 hover:bg-stone-800 hover:text-amber-300",
-        outline: "bg-transparent border border-stone-700 text-amber-50 hover:bg-stone-800",
-        danger: "bg-red-800 text-white hover:bg-red-700",
-        icon: "bg-transparent text-stone-400 hover:bg-stone-700 hover:text-amber-400 p-1.5 rounded",
-        iconColor: "bg-transparent text-amber-400 border border-amber-400/25 hover:bg-stone-800 hover:border-amber-400/50",
-        iconDanger: "bg-transparent text-stone-400 hover:border-red-500 hover:text-red-500 p-1.5 rounded"
+        default: 'bg-stone-800 text-stone-100 hover:bg-stone-700 active:bg-stone-600',
+        primary: 'bg-amber-600 text-stone-950 hover:bg-amber-500 active:bg-amber-400 shadow-sm shadow-amber-900/20',
+        secondary: 'bg-stone-800/80 text-stone-200 hover:bg-stone-700 border border-stone-700/50',
+        ghost: 'bg-transparent text-stone-400 hover:bg-stone-800/80 hover:text-amber-300',
+        outline: 'bg-transparent border border-stone-600/50 text-stone-200 hover:bg-stone-800/60 hover:border-stone-500',
+        danger: 'bg-red-900/80 text-red-100 hover:bg-red-800 border border-red-800/50',
+        icon: 'bg-transparent text-stone-400 hover:bg-stone-800 hover:text-amber-400 p-2 rounded-lg',
+        iconColor: 'bg-amber-600/10 text-amber-400 border border-amber-500/25 hover:bg-amber-600/20 hover:border-amber-500/40',
+        iconDanger: 'bg-transparent text-stone-400 hover:bg-red-950/50 hover:text-red-400 border border-transparent hover:border-red-900/50 p-2 rounded-lg',
     };
 
-    // Define size classes
     const sizeClasses: Record<ButtonSize | 'iconOnly', string> = {
-        xs: "text-xs py-1 px-2",
-        sm: "text-sm py-1.5 px-3",
-        md: "text-sm py-2 px-4",
-        lg: "text-base py-2.5 px-5",
-        xl: "text-base py-3 px-6",
-        // For icon-only buttons
-        iconOnly: "p-1.5"
+        xs: 'text-xs py-1 px-2',
+        sm: 'text-sm py-1.5 px-3',
+        md: 'text-sm py-2 px-4',
+        lg: 'text-base py-2.5 px-5',
+        xl: 'text-base py-3 px-6',
+        iconOnly: 'p-2',
     };
 
-    // Determine if it's an icon-only button
     const isIconOnly = !children && icon;
 
-    // Combine all classes
     const buttonClasses = [
         baseClasses,
         variantClasses[variant],
         isIconOnly ? sizeClasses.iconOnly : sizeClasses[size],
-        fullWidth ? "w-full" : "",
-        disabled ? "opacity-50 cursor-not-allowed" : "",
-        "cursor-pointer",
-        className
-    ].join(" ");
+        fullWidth ? 'w-full' : '',
+        disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
+        className,
+    ].join(' ');
 
-    // Determine icon spacing class
     const iconSpacingClass = children && icon ? (iconPosition === 'left' ? 'mr-2' : 'ml-2') : '';
 
     return (
@@ -84,11 +80,11 @@ const Button: React.FC<ButtonProps> = ({
             {...props}
         >
             {icon && iconPosition === 'left' && (
-                <span className={iconSpacingClass}>{icon}</span>
+                <span className={iconSpacingClass} aria-hidden="true">{icon}</span>
             )}
             {children}
             {icon && iconPosition === 'right' && (
-                <span className={iconSpacingClass}>{icon}</span>
+                <span className={iconSpacingClass} aria-hidden="true">{icon}</span>
             )}
         </button>
     );

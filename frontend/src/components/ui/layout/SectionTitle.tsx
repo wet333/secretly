@@ -11,20 +11,19 @@ interface SectionTitleProps {
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ hasBackButton, title, subtitle }) => {
     return (
-        <div className={"mb-8 flex gap-x-4"}>
+        <div className="mb-8 flex gap-4 items-start">
             {hasBackButton && (
-                <div className={"flex items-center"}>
-                    <Link to="/">
-                        <Button
-                            variant={"iconColor"}
-                            icon={<ArrowLeft/>}
-                        />
-                    </Link>
-                </div>
+                <Link to="/" className="shrink-0 mt-1">
+                    <Button
+                        variant="iconColor"
+                        aria-label="Back to dashboard"
+                        icon={<ArrowLeft size={18} aria-hidden="true" />}
+                    />
+                </Link>
             )}
-            <div>
-                <h1 className="text-2xl font-bold">{title}</h1>
-                <p className="text-stone-400 text-md mt-1">{subtitle}</p>
+            <div className="min-w-0">
+                <h1 className="text-2xl font-semibold text-stone-50 tracking-tight">{title}</h1>
+                <p className="text-stone-400 text-sm mt-1.5 leading-relaxed">{subtitle}</p>
             </div>
         </div>
     )

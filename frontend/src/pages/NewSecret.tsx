@@ -9,14 +9,14 @@ export function NewSecret() {
 
     React.useEffect(() => {
         document.title = "Secretly - Add Secret";
-    });
+    }, []);
 
     return (
         <Layout>
             <SectionTitle
                 hasBackButton={true}
-                title="New Secret"
-                subtitle={`Add a new secret on ${selectedProject?.name}`}
+                title="Add Secret"
+                subtitle={`Store a new encrypted value in ${selectedProject?.name ?? 'your project'}.`}
             />
             <NewSecretForm />
         </Layout>

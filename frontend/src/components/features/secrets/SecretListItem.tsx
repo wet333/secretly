@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useContext, useState} from 'react';
 import {Eye, EyeOff, Edit, Trash2, X, Check} from 'lucide-react';
 import Button from "../../ui/Button.tsx";
+import {Modal} from "../../ui/modal/Modal.tsx";
 import {ProjectContext, ProjectContextType, Secret} from "../../../context/ProjectContext.tsx";
 
 interface SecretListItemProps {
@@ -11,6 +12,7 @@ const SecretListItem : React.FC<SecretListItemProps> = ({ secret }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
     const [editValue, setEditValue] = useState(secret.value);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const { deleteSecret, updateSecret } = useContext(ProjectContext) as ProjectContextType;
 
     const toggleVisibility = () => {
@@ -33,7 +35,6 @@ const SecretListItem : React.FC<SecretListItemProps> = ({ secret }) => {
     const saveEdit = () => {
         setIsEditable(false);
         updateSecret(secret.projectName, secret.keyName, editValue);
-        setEditValue(editValue);
     }
 
     const cancelEdit = () => {
@@ -41,68 +42,94 @@ const SecretListItem : React.FC<SecretListItemProps> = ({ secret }) => {
         setEditValue(secret.value);
     }
 
-    const deleteSecretAction = () => {
+    const confirmDelete = () => {
         deleteSecret(secret.projectName, secret.keyName);
+        setShowDeleteConfirm(false);
     };
 
     return (
-        <tr className="bg-stone-900 hover:bg-stone-800">
-            <td className="py-4 px-4">
-                <div className="font-mono text-sm text-amber-100">{secret.keyName}</div>
-            </td>
-            <td className="py-4 px-4 w-1/2">
-                <div className="flex items-center">
+        <>
+            {showDeleteConfirm && (
+                <Modal
+                    isOpen={showDeleteConfirm}
+                    title="Delete Secret"
+                    onClose={() => setShowDeleteConfirm(false)}
+                    actions={
+                        <>
+                            <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>Cancel</Button>
+                            <Button variant="danger" onClick={confirmDelete}>Delete Secret</Button>
+                        </>
+                    }
+                >
+                    <p className="text-sm leading-relaxed">
+                        Delete <span className="font-mono font-medium text-amber-400">{secret.keyName}</span>? This cannot be undone.
+                    </p>
+                </Modal>
+            )}
+            <tr className="group hover:bg-stone-800/30 transition-colors duration-150">
+                <td className="py-3.5 px-4 min-w-0">
+                    <div className="font-mono text-sm text-stone-200 truncate max-w-[12rem] sm:max-w-none">
+                        {secret.keyName}
+                    </div>
+                </td>
+                <td className="py-3.5 px-4 min-w-0 max-w-xs sm:max-w-md">
                     {isEditable ? (
-                        <div className="flex w-full space-x-2">
+                        <div className="flex items-center gap-2 min-w-0">
                             <input
                                 type="text"
+                                name="secret-value-edit"
                                 value={editValue}
                                 onChange={handleValueChange}
-                                className="bg-stone-700 text-white font-mono text-sm px-2 py-1 rounded w-full"
-                                autoFocus
+                                autoComplete="off"
+                                spellCheck={false}
+                                aria-label={`Edit value for ${secret.keyName}`}
+                                className="input-field font-mono text-sm py-1.5 min-w-0 flex-1"
                             />
                             <Button
-                                variant={"icon"}
-                                icon={<Check size={16} className="text-green-500" />}
+                                variant="icon"
+                                aria-label="Save changes"
+                                icon={<Check size={16} className="text-emerald-500" aria-hidden="true" />}
                                 onClick={saveEdit}
                             />
                             <Button
-                                variant={"icon"}
-                                icon={<X size={16} className="text-red-500" />}
+                                variant="icon"
+                                aria-label="Cancel editing"
+                                icon={<X size={16} className="text-red-400" aria-hidden="true" />}
                                 onClick={cancelEdit}
                             />
                         </div>
                     ) : (
-                        <div className={`font-mono text-sm truncate max-w-md ${!isVisible ? "cursor-default" : ""}`}>
-                            {isVisible ? secret.value : "••••••••••••••••••••••"}
+                        <div className={`min-w-0 truncate ${isVisible ? 'secret-value' : 'secret-mask'}`}>
+                            {isVisible ? secret.value : '••••••••••••••••••••••'}
                         </div>
                     )}
-                </div>
-            </td>
-            <td className="py-4 px-4 text-right">
-                <div className="flex items-center justify-end space-x-2">
+                </td>
+                <td className="py-3.5 px-4 text-right">
                     {!isEditable && (
-                        <>
+                        <div className="flex items-center justify-end gap-0.5 opacity-70 group-hover:opacity-100 transition-opacity duration-150">
                             <Button
-                                variant={"icon"}
-                                icon={isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
+                                variant="icon"
+                                aria-label={isVisible ? 'Hide secret value' : 'Reveal secret value'}
+                                icon={isVisible ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
                                 onClick={toggleVisibility}
                             />
                             <Button
-                                variant={"icon"}
-                                icon={<Edit size={16} />}
+                                variant="icon"
+                                aria-label="Edit secret"
+                                icon={<Edit size={16} aria-hidden="true" />}
                                 onClick={toggleEditable}
                             />
                             <Button
-                                variant={"icon"}
-                                icon={<Trash2 size={16} />}
-                                onClick={deleteSecretAction}
+                                variant="icon"
+                                aria-label="Delete secret"
+                                icon={<Trash2 size={16} aria-hidden="true" />}
+                                onClick={() => setShowDeleteConfirm(true)}
                             />
-                        </>
+                        </div>
                     )}
-                </div>
-            </td>
-        </tr>
+                </td>
+            </tr>
+        </>
     );
 };
 

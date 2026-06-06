@@ -16,7 +16,7 @@ const NewSecretForm: React.FC = () => {
         e.preventDefault();
 
         if (!keyName.trim() || !value.trim()) {
-            setError('Both Key Name and Value are required');
+            setError('Both key name and value are required.');
             return;
         }
 
@@ -28,13 +28,11 @@ const NewSecretForm: React.FC = () => {
                 addSecret(selectedProject.name, { keyName: keyName, value: value });
             }
 
-            // Clear form after successful submission
             setKeyName('');
             setValue('');
-
             navigate("/");
         } catch (err) {
-            setError('Failed to add secret. Please try again.');
+            setError('Failed to add secret. Check your connection and try again.');
             console.error('Error adding secret:', err);
         } finally {
             setIsSubmitting(false);
@@ -42,52 +40,63 @@ const NewSecretForm: React.FC = () => {
     };
 
     return (
-        <div className="bg-stone-900 rounded-lg py-4 px-6">
-            <form onSubmit={handleSubmit}>
+        <div className="card p-6">
+            <form onSubmit={handleSubmit} noValidate>
                 {error && (
-                    <div className="flex mb-4 text-red-400 text-sm p-3 bg-red-900/15 rounded items-center">
-                        <CircleAlert size={18} className="mr-2" />
-                        {error}
+                    <div role="alert" className="flex mb-5 text-red-300 text-sm p-3 bg-red-950/40 rounded-lg border border-red-900/40 items-start gap-2">
+                        <CircleAlert size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                        <span>{error}</span>
                     </div>
                 )}
 
-                <div className="mb-4">
-                    <label htmlFor="keyName" className="block text-stone-300 mb-2">
+                <div className="mb-5">
+                    <label htmlFor="keyName" className="block text-sm font-medium text-stone-300 mb-2">
                         Key Name
                     </label>
                     <input
                         type="text"
                         id="keyName"
+                        name="keyName"
                         value={keyName}
                         onChange={(e) => setKeyName(e.target.value)}
-                        className="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        placeholder="Enter key name"
-                        autoComplete={"off"}
+                        className="input-field font-mono"
+                        placeholder="e.g. STRIPE_API_KEY…"
+                        autoComplete="off"
+                        spellCheck={false}
                     />
                 </div>
 
                 <div className="mb-6">
-                    <label htmlFor="value" className="block text-stone-300 mb-2">
+                    <label htmlFor="value" className="block text-sm font-medium text-stone-300 mb-2">
                         Value
                     </label>
                     <input
-                        type="text"
+                        type="password"
                         id="value"
+                        name="value"
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
-                        className="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        placeholder="Enter secret value"
-                        autoComplete={"off"}
+                        className="input-field font-mono"
+                        placeholder="Enter secret value…"
+                        autoComplete="off"
+                        spellCheck={false}
                     />
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => navigate("/")}
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         type="submit"
-                        variant={"primary"}
+                        variant="primary"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Adding...' : 'Send'}
+                        {isSubmitting ? 'Saving…' : 'Save Secret'}
                     </Button>
                 </div>
             </form>

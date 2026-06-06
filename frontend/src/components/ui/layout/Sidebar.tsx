@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, FolderLock } from 'lucide-react';
 import ProjectList from '../../features/projects/ProjectList.tsx';
 import {ProjectContext, Project, ProjectContextType} from '../../../context/ProjectContext.tsx';
 import Button from "../Button.tsx";
@@ -14,32 +14,58 @@ const Sidebar : React.FC = () => {
     );
 
     return (
-        <div className="w-64 bg-stone-900 border-r border-stone-800 p-4">
-            <div className="relative mb-6">
-                <input
-                    type="text"
-                    placeholder="Search projects..."
-                    className="w-full bg-stone-800 rounded-lg py-2 pl-10 pr-4 text-sm border border-stone-700 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Search size={16} className="absolute left-3 top-2.5 text-stone-500" />
+        <aside className="flex w-full md:w-72 shrink-0 flex-col border-b md:border-b-0 md:border-r border-stone-800/60 bg-stone-950/50 max-h-[40vh] md:max-h-none">
+            <div className="p-4 border-b border-stone-800/40">
+                <label htmlFor="project-search" className="sr-only">
+                    Search projects
+                </label>
+                <div className="relative">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none" aria-hidden="true" />
+                    <input
+                        id="project-search"
+                        name="project-search"
+                        type="search"
+                        placeholder="Search projects…"
+                        autoComplete="off"
+                        spellCheck={false}
+                        className="input-field input-field-search text-sm"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
             </div>
 
-            <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider">Projects</h2>
-                    <Link to={"/createProject"}>
+            <div className="flex-1 overflow-y-auto p-4 overscroll-contain">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
+                        Projects
+                    </h2>
+                    <Link to="/createProject">
                         <Button
-                            variant={"iconColor"}
-                            icon={<Plus size={16} />}
-                            // TODO: Add create project action
+                            variant="iconColor"
+                            size="sm"
+                            aria-label="Create project"
+                            icon={<Plus size={16} aria-hidden="true" />}
                         />
                     </Link>
                 </div>
-                <ProjectList projects={filteredProjects} />
+                {filteredProjects.length === 0 ? (
+                    <div className="empty-state py-8">
+                        <FolderLock size={32} className="text-stone-600 mb-3" aria-hidden="true" />
+                        <p className="text-sm text-stone-500">
+                            {searchQuery ? 'No projects match your search' : 'No projects yet'}
+                        </p>
+                        {!searchQuery && (
+                            <Link to="/createProject" className="mt-3 text-sm font-medium text-amber-500 hover:text-amber-400">
+                                Create your first project
+                            </Link>
+                        )}
+                    </div>
+                ) : (
+                    <ProjectList projects={filteredProjects} />
+                )}
             </div>
-        </div>
+        </aside>
     );
 };
 

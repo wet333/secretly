@@ -8,15 +8,14 @@ const NewProjectForm: React.FC = () => {
     const [projectName, setProjectName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { setSelectedProject } = useProject();
-    const {addProject} = useProject();
+    const { setSelectedProject, addProject } = useProject();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!projectName.trim()) {
-            setError('Project name is required');
+            setError('Project name is required.');
             return;
         }
 
@@ -26,12 +25,10 @@ const NewProjectForm: React.FC = () => {
         try {
             addProject({ name: projectName, secrets: [] });
             setSelectedProject({ name: projectName, secrets: [] });
-
-            // Clear form after successful submission
             setProjectName('');
             navigate("/")
         } catch (err) {
-            setError('Failed to create new project. Please try again.');
+            setError('Failed to create project. Check your connection and try again.');
             console.error('Error creating project:', err);
         } finally {
             setIsSubmitting(false);
@@ -39,37 +36,48 @@ const NewProjectForm: React.FC = () => {
     };
 
     return (
-        <div className="bg-stone-900 rounded-lg py-4 px-6">
-            <form onSubmit={handleSubmit}>
+        <div className="card p-6">
+            <form onSubmit={handleSubmit} noValidate>
                 {error && (
-                    <div className="flex mb-4 text-red-400 text-sm p-3 bg-red-900/15 rounded items-center">
-                        <CircleAlert size={18} className="mr-2" />
-                        {error}
+                    <div role="alert" className="flex mb-5 text-red-300 text-sm p-3 bg-red-950/40 rounded-lg border border-red-900/40 items-start gap-2">
+                        <CircleAlert size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                        <span>{error}</span>
                     </div>
                 )}
 
-                <div className="mb-4">
-                    <label htmlFor="projectName" className="block text-stone-300 mb-2">
+                <div className="mb-6">
+                    <label htmlFor="projectName" className="block text-sm font-medium text-stone-300 mb-2">
                         Project Name
                     </label>
                     <input
                         type="text"
                         id="projectName"
+                        name="projectName"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
-                        className="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        placeholder="Enter project name"
-                        autoComplete={"off"}
+                        className="input-field"
+                        placeholder="e.g. Production API…"
+                        autoComplete="off"
                     />
+                    <p className="text-xs text-stone-500 mt-2">
+                        Group related secrets under one project.
+                    </p>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => navigate("/")}
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         type="submit"
-                        variant={"primary"}
+                        variant="primary"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Creating project...' : 'Send'}
+                        {isSubmitting ? 'Creating…' : 'Create Project'}
                     </Button>
                 </div>
             </form>

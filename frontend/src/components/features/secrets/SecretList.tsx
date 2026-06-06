@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Search, Lock } from 'lucide-react';
+import { Search, Lock, KeyRound } from 'lucide-react';
 import SecretListItem from './SecretListItem.tsx';
 import {Secret} from "../../../context/ProjectContext.tsx";
 import {Link} from "react-router-dom";
+import Button from "../../ui/Button.tsx";
+import {Plus} from "lucide-react";
 
 interface SecretsListProps {
     count: number,
@@ -17,44 +19,66 @@ const SecretList: React.FC<SecretsListProps> = ({ secrets, count }) => {
     );
 
     return (
-        <div key={count} className="bg-stone-900 rounded-xl border border-stone-800 overflow-hidden shadow-lg shadow-black/50">
-            <div className="p-4 border-b border-stone-800 flex justify-between items-center">
-                <h2 className="font-medium text-amber-200">Secret Keys</h2>
-                <div className="flex items-center space-x-2">
-                    <Search size={16} className="text-stone-500" />
+        <section key={count} className="card overflow-hidden" aria-labelledby="secrets-heading">
+            <div className="card-header flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div className="flex items-center gap-2">
+                    <KeyRound size={16} className="text-amber-500" aria-hidden="true" />
+                    <h2 id="secrets-heading" className="font-medium text-stone-100">Secret Keys</h2>
+                    <span className="text-xs text-stone-500 tabular-nums">({secrets.length})</span>
+                </div>
+                <div className="relative w-full sm:w-56">
+                    <label htmlFor="secret-filter" className="sr-only">Filter secrets</label>
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 pointer-events-none" aria-hidden="true" />
                     <input
-                        type="text"
-                        placeholder="Filter secrets..."
-                        className="bg-stone-800 border-none rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-amber-500/30"
+                        id="secret-filter"
+                        name="secret-filter"
+                        type="search"
+                        placeholder="Filter by key name…"
+                        autoComplete="off"
+                        spellCheck={false}
+                        className="input-field input-field-search text-sm py-1.5"
                         value={filterQuery}
                         onChange={(e) => setFilterQuery(e.target.value)}
                     />
                 </div>
             </div>
-            <table className="w-full">
-                <thead className="bg-stone-800">
-                <tr>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-stone-400 uppercase tracking-wider">Key Name</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-stone-400 uppercase tracking-wider">Value</th>
-                    <th className="py-3 px-4 text-right text-xs font-medium text-stone-400 uppercase tracking-wider">Actions</th>
-                </tr>
-                </thead>
-                <tbody className="divide-y divide-stone-800">
-                {filteredSecrets.map((secret, index) => (
-                    <SecretListItem key={index} secret={secret} />
-                ))}
-                </tbody>
-            </table>
-            {secrets.length === 0 && (
-                <div className="py-8 text-center text-stone-500">
-                    <Lock className="mx-auto h-10 w-10 mb-3 opacity-30" />
-                    <p>No secrets found in this project</p>
-                    <Link to={"/addSecret"}>
-                        <button className="mt-3 text-amber-400 text-sm font-medium hover:text-amber-300">Add your first secret</button>
+
+            {secrets.length === 0 ? (
+                <div className="empty-state">
+                    <Lock size={36} className="text-stone-600 mb-3" aria-hidden="true" />
+                    <p className="text-sm font-medium text-stone-400 mb-1">No secrets in this project</p>
+                    <p className="text-xs text-stone-500 mb-4">Add your first API key or environment variable</p>
+                    <Link to="/addSecret">
+                        <Button variant="primary" size="sm" icon={<Plus size={16} aria-hidden="true" />}>
+                            Add Secret
+                        </Button>
                     </Link>
                 </div>
+            ) : filteredSecrets.length === 0 ? (
+                <div className="empty-state py-10">
+                    <p className="text-sm text-stone-500">No secrets match &ldquo;{filterQuery}&rdquo;</p>
+                </div>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="border-b border-stone-800/60">
+                                <th scope="col" className="py-3 px-4 text-left text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Key</th>
+                                <th scope="col" className="py-3 px-4 text-left text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Value</th>
+                                <th scope="col" className="py-3 px-4 text-right text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
+                                    <span className="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-800/40">
+                            {filteredSecrets.map((secret) => (
+                                <SecretListItem key={`${secret.projectName}-${secret.keyName}`} secret={secret} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
-        </div>
+        </section>
     );
 };
 

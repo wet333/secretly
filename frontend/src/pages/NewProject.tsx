@@ -6,14 +6,14 @@ import React from "react";
 export function NewProject() {
     React.useEffect(() => {
         document.title = "Secretly - New Project";
-    });
+    }, []);
 
     return (
         <Layout>
             <SectionTitle
                 hasBackButton={true}
-                title="Create project"
-                subtitle={`Create a new project to store all your related secrets.`}
+                title="Create Project"
+                subtitle="Organize your secrets into a dedicated, encrypted vault."
             />
             <NewProjectForm />
         </Layout>
