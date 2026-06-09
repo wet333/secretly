@@ -18,13 +18,13 @@ const Header : React.FC = () => {
     }
 
     return (
-        <header className="sticky top-0 z-40 border-b border-stone-800/60 bg-stone-950/80 backdrop-blur-md px-6 py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
-            <div className="flex items-center justify-between max-w-[90rem] mx-auto">
-                <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-600/15 border border-amber-500/20">
+        <header className="shrink-0 pt-[max(0.25rem,env(safe-area-inset-top))]">
+            <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-600/15 border border-amber-500/20">
                         <Shield className="h-5 w-5 text-amber-500" aria-hidden="true" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                         <span className="text-lg font-semibold tracking-tight text-stone-50">
                             {LOGO_TITLE}
                         </span>
@@ -33,7 +33,7 @@ const Header : React.FC = () => {
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                     <Button
                         variant="icon"
                         aria-label="Open settings"

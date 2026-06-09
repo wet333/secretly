@@ -1,28 +1,43 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 import { Activity } from 'lucide-react';
 import ActivityItem from './ActivityItem.tsx';
-import {ActivityContext, ActivityContextType, ActivityNotification} from "../../../context/ActivityContext.tsx";
+import {ActivityContext, ActivityContextType} from "../../../context/ActivityContext.tsx";
+
+const ACTIVITY_LIMIT = 5;
 
 const ActivityList: React.FC = () => {
     const { activities } = useContext(ActivityContext) as ActivityContextType;
 
-    if (activities.length === 0) {
+    const recentActivities = useMemo(() => {
+        return [...activities]
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            .slice(0, ACTIVITY_LIMIT);
+    }, [activities]);
+
+    if (recentActivities.length === 0) {
         return null;
     }
 
     return (
-        <section className="mt-10" aria-labelledby="activity-heading">
-            <div className="flex items-center gap-2 mb-4">
-                <Activity size={16} className="text-amber-500" aria-hidden="true" />
-                <h2 id="activity-heading" className="text-base font-medium text-stone-200">
-                    Recent Activity
-                </h2>
+        <section className="card" aria-labelledby="activity-heading">
+            <div className="card-header">
+                <div className="card-header__title">
+                    <Activity size={16} className="text-amber-500 shrink-0" aria-hidden="true" />
+                    <h2 id="activity-heading" className="font-medium text-stone-100">
+                        Recent Activity
+                    </h2>
+                </div>
+                <span className="text-xs text-stone-500 tabular-nums shrink-0">
+                    Last {recentActivities.length}
+                </span>
             </div>
-            <div className="card divide-y divide-stone-800/40 overflow-hidden">
-                {activities.map((activity: ActivityNotification) => (
-                    <ActivityItem key={activity.id} activity={activity} />
+            <ul className="activity-list">
+                {recentActivities.map((activity) => (
+                    <li key={activity.id}>
+                        <ActivityItem activity={activity} />
+                    </li>
                 ))}
-            </div>
+            </ul>
         </section>
     );
 };

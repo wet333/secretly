@@ -18,7 +18,9 @@ export function NewSecret() {
                 title="Add Secret"
                 subtitle={`Store a new encrypted value in ${selectedProject?.name ?? 'your project'}.`}
             />
-            <NewSecretForm />
+            <div className="form-shell">
+                <NewSecretForm />
+            </div>
         </Layout>
     );
 }

@@ -67,12 +67,12 @@ const SecretListItem : React.FC<SecretListItemProps> = ({ secret }) => {
                 </Modal>
             )}
             <tr className="group hover:bg-stone-800/30 transition-colors duration-150">
-                <td className="py-3.5 px-4 min-w-0">
-                    <div className="font-mono text-sm text-stone-200 truncate max-w-[12rem] sm:max-w-none">
+                <td className="py-3 px-4 min-w-0">
+                    <div className="font-mono text-sm text-stone-200 break-words">
                         {secret.keyName}
                     </div>
                 </td>
-                <td className="py-3.5 px-4 min-w-0 max-w-xs sm:max-w-md">
+                <td className="py-3 px-4 min-w-0">
                     {isEditable ? (
                         <div className="flex items-center gap-2 min-w-0">
                             <input
@@ -104,9 +104,9 @@ const SecretListItem : React.FC<SecretListItemProps> = ({ secret }) => {
                         </div>
                     )}
                 </td>
-                <td className="py-3.5 px-4 text-right">
+                <td className="py-3 px-4 text-right w-[6.75rem]">
                     {!isEditable && (
-                        <div className="flex items-center justify-end gap-0.5 opacity-70 group-hover:opacity-100 transition-opacity duration-150">
+                        <div className="flex items-center justify-end gap-0.5 opacity-80 group-hover:opacity-100 transition-opacity duration-150">
                             <Button
                                 variant="icon"
                                 aria-label={isVisible ? 'Hide secret value' : 'Reveal secret value'}

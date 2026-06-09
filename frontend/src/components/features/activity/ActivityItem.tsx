@@ -4,7 +4,7 @@ import {ActivityInfo, ActivityNotification} from "./../../../context/ActivityCon
 import {timeAgo} from "../../../lib/utils/dates.ts";
 
 interface ActivityItemProps {
-    activity: ActivityNotification
+    activity: ActivityNotification;
 }
 
 const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
@@ -47,17 +47,6 @@ const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
             parts.push(template.slice(lastIndex));
         }
         return parts;
-    }
-
-    const getMessage = () => {
-        const message: string = activity.activityInfo?.message;
-        const activityData = activity.activityInfo;
-
-        return (
-            <p className="text-sm text-stone-300 leading-relaxed">
-                {buildMsg(message, activityData)}
-            </p>
-        );
     };
 
     const actionLabel = activity.activityAction === 'CREATE'
@@ -66,17 +55,22 @@ const ActivityItem : React.FC<ActivityItemProps> = ({ activity }) => {
             ? 'Updated'
             : 'Deleted';
 
+    const message = activity.activityInfo?.message;
+    const activityData = activity.activityInfo;
+
     return (
-        <div className="px-4 py-3.5 flex items-start gap-3 hover:bg-stone-800/20 transition-colors duration-150">
+        <div className="flex items-start gap-3 px-4 py-3">
             <div
-                className="h-8 w-8 shrink-0 rounded-lg bg-amber-600/10 text-amber-500 flex items-center justify-center border border-amber-500/15"
+                className="shrink-0 h-7 w-7 rounded-md bg-amber-600/10 text-amber-500 flex items-center justify-center border border-amber-500/15"
                 aria-hidden="true"
             >
                 {getIcon()}
             </div>
             <div className="flex-1 min-w-0">
                 <span className="sr-only">{actionLabel}: </span>
-                {getMessage()}
+                <p className="text-sm text-stone-300 leading-relaxed">
+                    {buildMsg(message, activityData)}
+                </p>
                 <time className="text-xs text-stone-500 mt-1 block tabular-nums" dateTime={activity.createdAt}>
                     {timeAgo(activity.createdAt)}
                 </time>

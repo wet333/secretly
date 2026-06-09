@@ -70,11 +70,110 @@ body {
 }
 
 .app-shell {
+    display: flex;
+    flex-direction: column;
     min-height: 100dvh;
     background:
         radial-gradient(ellipse 80% 50% at 50% -20%, rgb(217 119 6 / 8%), transparent),
         radial-gradient(ellipse 60% 40% at 100% 0%, rgb(251 191 36 / 4%), transparent),
         var(--color-surface);
+}
+
+.app-frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    max-width: 68rem;
+    margin-inline: auto;
+    padding:
+        max(1rem, env(safe-area-inset-top))
+        max(1rem, env(safe-area-inset-right))
+        max(1.5rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
+}
+
+@media (min-width: 1024px) {
+    .app-frame {
+        padding-inline: max(1.5rem, env(safe-area-inset-left)) max(1.5rem, env(safe-area-inset-right));
+        padding-block: max(1.25rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-bottom));
+    }
+}
+
+.app-header {
+    flex-shrink: 0;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(68 64 60 / 35%);
+}
+
+@media (min-width: 1024px) {
+    .app-header {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.app-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgb(68 64 60 / 35%);
+}
+
+@media (min-width: 1024px) {
+    .app-footer {
+        padding-top: 1.25rem;
+    }
+}
+
+.app-workspace {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 0;
+}
+
+@media (min-width: 1024px) {
+    .app-workspace {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+}
+
+.app-sidebar {
+    flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+    .app-sidebar {
+        width: 15rem;
+        position: sticky;
+        top: 1.25rem;
+    }
+}
+
+.app-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-shell {
+    width: 100%;
+    max-width: 32rem;
+}
+
+@media (min-width: 1280px) {
+    .form-shell {
+        max-width: 36rem;
+    }
 }
 
 .card {
@@ -85,8 +184,35 @@ body {
 }
 
 .card-header {
-    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.875rem 1.25rem;
     border-bottom: 1px solid rgb(68 64 60 / 30%);
+}
+
+.card-header__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.project-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .project-banner {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
 }
 
 .input-field {
@@ -125,6 +251,7 @@ body {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     color: var(--color-accent-soft);
+    word-break: break-all;
 }
 
 .stat-pill {
@@ -161,4 +288,32 @@ h1, h2, h3 {
 
 .tabular-nums {
     font-variant-numeric: tabular-nums;
+}
+
+.secrets-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.secrets-table col.col-key {
+    width: 34%;
+}
+
+.secrets-table col.col-actions {
+    width: 6.75rem;
+}
+
+.secrets-table th,
+.secrets-table td {
+    vertical-align: middle;
+}
+
+.activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-list > li + li {
+    border-top: 1px solid rgb(68 64 60 / 25%);
 }

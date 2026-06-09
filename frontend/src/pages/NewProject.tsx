@@ -15,7 +15,9 @@ export function NewProject() {
                 title="Create Project"
                 subtitle="Organize your secrets into a dedicated, encrypted vault."
             />
-            <NewProjectForm />
+            <div className="form-shell">
+                <NewProjectForm />
+            </div>
         </Layout>
     );
 }

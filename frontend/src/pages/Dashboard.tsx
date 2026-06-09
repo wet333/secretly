@@ -60,71 +60,59 @@ const Dashboard = () => {
                         </Modal>
                     )}
 
-                    <div className="mb-8">
-                        {noProjects ? (
-                            <div className="card p-8 text-center">
-                                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-600/10 border border-amber-500/20">
-                                    <ShieldCheck size={28} className="text-amber-500" aria-hidden="true" />
-                                </div>
-                                <h1 className="text-2xl font-semibold text-stone-50 mb-2">Welcome to Secretly</h1>
-                                <p className="text-stone-400 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
-                                    Store API keys and environment variables in an encrypted vault. Create your first project to get started.
-                                </p>
-                                <Link to="/createProject">
-                                    <Button variant="primary" icon={<Plus size={18} />} iconPosition="left">
-                                        Create Project
-                                    </Button>
-                                </Link>
+                    {noProjects ? (
+                        <div className="card p-8 text-center max-w-lg mx-auto">
+                            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-600/10 border border-amber-500/20">
+                                <ShieldCheck size={28} className="text-amber-500" aria-hidden="true" />
                             </div>
-                        ) : (
-                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                                <div className="min-w-0">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <h1 className="text-2xl font-semibold text-stone-50 truncate">
-                                            {selectedProject?.name}
-                                        </h1>
-                                    </div>
+                            <h1 className="text-2xl font-semibold text-stone-50 mb-2">Welcome to Secretly</h1>
+                            <p className="text-stone-400 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
+                                Store API keys and environment variables in an encrypted vault. Create your first project to get started.
+                            </p>
+                            <Link to="/createProject">
+                                <Button variant="primary" icon={<Plus size={18} />} iconPosition="left">
+                                    Create Project
+                                </Button>
+                            </Link>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="card project-banner">
+                                <div className="min-w-0 flex-1">
+                                    <h1 className="text-xl font-semibold text-stone-50 truncate sm:text-2xl">
+                                        {selectedProject?.name}
+                                    </h1>
                                     <div className="flex flex-wrap items-center gap-2 mt-2">
                                         <span className="stat-pill tabular-nums">
                                             <KeyRound size={12} aria-hidden="true" />
                                             {secretCount} {secretCount === 1 ? 'secret' : 'secrets'}
                                         </span>
-                                        <span className="text-xs text-stone-500 flex items-center gap-1">
+                                        <span className="text-xs text-stone-500 inline-flex items-center gap-1">
                                             <ShieldCheck size={12} className="text-amber-600/80" aria-hidden="true" />
                                             Encrypted at rest
                                         </span>
                                     </div>
                                 </div>
                                 {selectedProject && (
-                                    <div className="flex items-center gap-2 shrink-0">
-                                        <Button
-                                            variant="iconDanger"
-                                            size="sm"
-                                            icon={<Trash2 size={16} aria-hidden="true" />}
-                                            onClick={() => setShowDeleteConfirm(true)}
-                                        >
-                                            Delete
-                                        </Button>
-                                        <Link to="/addSecret">
-                                            <Button
-                                                variant="primary"
-                                                size="sm"
-                                                icon={<Plus size={16} aria-hidden="true" />}
-                                                iconPosition="left"
-                                            >
-                                                Add Secret
-                                            </Button>
-                                        </Link>
-                                    </div>
+                                    <Button
+                                        variant="dangerOutline"
+                                        size="sm"
+                                        className="self-start shrink-0"
+                                        icon={<Trash2 size={16} aria-hidden="true" />}
+                                        onClick={() => setShowDeleteConfirm(true)}
+                                    >
+                                        Delete Project
+                                    </Button>
                                 )}
                             </div>
-                        )}
-                    </div>
 
-                    {selectedProject && (
-                        <SecretList count={selectedProject.secrets.length} secrets={selectedProject.secrets} />
+                            {selectedProject && (
+                                <SecretList count={selectedProject.secrets.length} secrets={selectedProject.secrets} />
+                            )}
+
+                            <ActivityList />
+                        </>
                     )}
-                    {!noProjects && <ActivityList />}
                 </Layout>
             )}
         </>

@@ -1,4 +1,5 @@
 import Header from './Header.tsx';
+import Footer from './Footer.tsx';
 import Sidebar from './Sidebar.tsx';
 import React, {useContext} from "react";
 import {AppGlobalContext} from "../../../context/AppGlobalContext.tsx";
@@ -9,7 +10,7 @@ import {saveAs} from "file-saver";
 import {Download, Shield} from "lucide-react";
 
 interface LayoutProps {
-    children: React.ReactNode
+    children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -52,15 +53,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
                 </Modal>
             )}
-            <div className="app-shell min-h-dvh flex flex-col">
-                <Header />
-                <div className="flex flex-1 min-h-0 flex-col md:flex-row">
-                    <Sidebar />
-                    <main id="main-content" className="flex-1 min-w-0 overflow-y-auto">
-                        <div className="mx-auto w-full max-w-3xl px-6 py-8 pb-[max(2rem,env(safe-area-inset-bottom))]">
-                            {children}
+            <div className="app-shell">
+                <div className="app-frame">
+                    <div className="app-header">
+                        <Header />
+                    </div>
+                    <div className="app-workspace">
+                        <div className="app-sidebar">
+                            <Sidebar />
                         </div>
-                    </main>
+                        <main id="main-content" className="app-main">
+                            <div className="page-content">
+                                {children}
+                            </div>
+                        </main>
+                    </div>
+                    <div className="app-footer">
+                        <Footer />
+                    </div>
                 </div>
             </div>
         </>
