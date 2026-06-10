@@ -5,11 +5,13 @@ import { NewSecret } from "./pages/NewSecret.tsx";
 import { NewProject } from "./pages/NewProject.tsx";
 import { ActivityContextProvider } from "./context/ActivityContext.tsx";
 import { AppGlobalContextProvider } from "./context/AppGlobalContext.tsx";
+import { ThemeProvider } from "./context/ThemeContext.tsx";
 
 // TODO: Unify all Providers
 
 const App = () => {
     return (
+        <ThemeProvider>
         <AppGlobalContextProvider>
             <ProjectProvider>
                 <ActivityContextProvider>
@@ -21,6 +23,7 @@ const App = () => {
                 </ActivityContextProvider>
             </ProjectProvider>
         </AppGlobalContextProvider>
+        </ThemeProvider>
     );
 };
 

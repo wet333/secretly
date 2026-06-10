@@ -9,3 +9,4 @@ export { default as Led } from "./Led";
 export { default as Alert } from "./Alert";
 export { default as EmptyState } from "./EmptyState";
 export { default as Loader } from "./Loader";
+export { default as ThemeSwitch } from "./ThemeSwitch";

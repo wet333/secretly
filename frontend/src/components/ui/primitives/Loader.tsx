@@ -10,7 +10,7 @@ interface LoaderProps {
 const circleRadius = 18;
 const circleCircumference = 2 * Math.PI * circleRadius;
 
-const Loader: FC<LoaderProps> = ({ color = "#ff8c2e", size = 40, label = "Loading…" }) => {
+const Loader: FC<LoaderProps> = ({ color = "var(--accent)", size = 40, label = "Loading…" }) => {
     return (
         <div role="status" aria-live="polite" className="flex flex-col items-center gap-3">
             <svg

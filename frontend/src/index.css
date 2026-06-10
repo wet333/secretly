@@ -15,7 +15,28 @@
     --text-2xl: 1.5rem;
     --text-3xl: 1.875rem;
 
-    /* Industrial Dark — warm charcoal chassis */
+    --color-base: #121310;
+    --color-panel: #161714;
+    --color-raised: #1b1c18;
+    --color-sunken: #0e0f0c;
+    --color-screen: #0c0d09;
+    --color-line: #272820;
+    --color-line-strong: #3a3b31;
+    --color-pri: #e8e6da;
+    --color-sec: #a3a08e;
+    --color-mut: #6b695a;
+    --color-faint: #54534a;
+    --color-accent: #ff8c2e;
+    --color-accent-up: #ffa14f;
+    --color-accent-down: #c2641a;
+    --color-accent-ink: #1c1206;
+    --color-ok: #7ade8e;
+    --color-warn: #e8b04a;
+    --color-err: #e0483a;
+}
+
+:root,
+[data-theme="dark"] {
     --color-base: #121310;
     --color-panel: #161714;
     --color-raised: #1b1c18;
@@ -30,19 +51,10 @@
     --color-mut: #6b695a;
     --color-faint: #54534a;
 
-    /* Accent — signal orange (physical key) */
-    --color-accent: #ff8c2e;
-    --color-accent-up: #ffa14f;
-    --color-accent-down: #c2641a;
-    --color-accent-ink: #1c1206;
-
-    /* Phosphor states */
     --color-ok: #7ade8e;
     --color-warn: #e8b04a;
     --color-err: #e0483a;
-}
 
-:root {
     --surface-base: var(--color-base);
     --surface-panel: var(--color-panel);
     --surface-raised: var(--color-raised);
@@ -62,11 +74,59 @@
     --ok-bg: rgb(122 222 142 / 10%);
     --warn-bg: rgb(232 176 74 / 10%);
     --err-bg: rgb(224 72 58 / 10%);
+    --modal-backdrop: rgb(8 8 6 / 85%);
 
     color-scheme: dark;
+    -webkit-tap-highlight-color: rgb(255 140 46 / 12%);
+}
+
+[data-theme="light"] {
+    --color-base: #e8e4d8;
+    --color-panel: #dedad0;
+    --color-raised: #f2eee4;
+    --color-sunken: #d4d0c4;
+    --color-screen: #d0dcc4;
+
+    --color-line: #c4bfb3;
+    --color-line-strong: #a8a394;
+
+    --color-pri: #1c1a14;
+    --color-sec: #4a463c;
+    --color-mut: #6e6a5e;
+    --color-faint: #8a8678;
+
+    --color-ok: #2d7a42;
+    --color-warn: #9a6b12;
+    --color-err: #b83228;
+
+    --surface-base: var(--color-base);
+    --surface-panel: var(--color-panel);
+    --surface-raised: var(--color-raised);
+    --surface-input: var(--color-sunken);
+    --surface-screen: var(--color-screen);
+
+    --border-hairline: var(--color-line);
+    --border-strong: var(--color-line-strong);
+
+    --accent: var(--color-accent);
+
+    --text-primary: var(--color-pri);
+    --text-secondary: var(--color-sec);
+    --text-muted: var(--color-mut);
+    --text-faint: var(--color-faint);
+
+    --ok-bg: rgb(45 122 66 / 12%);
+    --warn-bg: rgb(154 107 18 / 12%);
+    --err-bg: rgb(184 50 40 / 12%);
+    --modal-backdrop: rgb(28 26 20 / 50%);
+
+    color-scheme: light;
+    -webkit-tap-highlight-color: rgb(255 140 46 / 18%);
+}
+
+:root {
     line-height: 1.5;
     font-weight: 400;
-    -webkit-tap-highlight-color: rgb(255 140 46 / 12%);
 }
 
 @layer base {
@@ -347,7 +407,67 @@ body {
 
 /* ── Modal ────────────────────────────────────────────────── */
 .modal-backdrop {
-    background: rgb(8 8 6 / 85%);
+    background: var(--modal-backdrop);
+}
+
+.theme-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border-hairline);
+    background: var(--surface-raised);
+}
+
+.theme-switch__track {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-input);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 8%);
+    cursor: pointer;
+    transition: border-color 150ms ease;
+}
+
+.theme-switch__track:hover {
+    border-color: var(--accent);
+}
+
+.theme-switch__track:focus-visible {
+    outline: none;
+    box-shadow:
+        inset 0 1px 2px rgb(0 0 0 / 8%),
+        0 0 0 1px var(--accent);
+}
+
+.theme-switch__option {
+    min-width: 4.25rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition:
+        background-color 150ms ease,
+        color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.theme-switch__option--active {
+    background: var(--accent);
+    color: var(--color-accent-ink);
+    box-shadow: inset 0 -1px 0 var(--color-accent-down);
+}
+
+.theme-switch__option + .theme-switch__option {
+    border-left: 1px solid var(--border-strong);
 }
 
 /* ── Secrets list ─────────────────────────────────────────── */

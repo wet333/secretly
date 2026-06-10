@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar.tsx";
 import React, { useContext } from "react";
 import { AppGlobalContext } from "../../../context/AppGlobalContext.tsx";
 import { Modal } from "../overlay/Modal.tsx";
-import { Button } from "../primitives";
+import { Button, ThemeSwitch } from "../primitives";
 import { ProjectContext } from "../../../context/ProjectContext.tsx";
 import { saveAs } from "file-saver";
 import { Download, Shield } from "lucide-react";
@@ -31,6 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {isModalVisible && (
                 <Modal isOpen={isModalVisible} title="Settings" onClose={toggleModalVisibility}>
                     <div className="space-y-4">
+                        <ThemeSwitch />
                         <div className="flex items-start gap-3 bg-raised p-3 border border-line">
                             <Shield
                                 size={18}
