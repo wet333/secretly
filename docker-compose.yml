@@ -1,38 +1,38 @@
 services:
-  backend:
-    build: ./secretly_api
-    container_name: secretly_backend
-    environment:
-      - API_SECRET=${API_SECRET}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_DLL_MODE=${DB_DLL_MODE}
-      - LOGGING_LEVEL=${LOGGING_LEVEL}
-      - CORS_HOST=${CORS_HOST}
-    ports:
-      - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
+    backend:
+        build: ./secretly_api
+        container_name: secretly_backend
+        environment:
+            - API_SECRET=${API_SECRET}
+            - DB_HOST=${DB_HOST}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASS=${DB_PASS}
+            - DB_DLL_MODE=${DB_DLL_MODE}
+            - LOGGING_LEVEL=${LOGGING_LEVEL}
+            - CORS_HOST=${CORS_HOST}
+        ports:
+            - "8080:8080"
+        depends_on:
+            db:
+                condition: service_healthy
 
-  db:
-    image: postgres:16
-    container_name: secretly_db
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    db:
+        image: postgres:16
+        container_name: secretly_db
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASS}
+            POSTGRES_DB: ${DB_NAME}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
 volumes:
-  postgres_data:
+    postgres_data:

@@ -1,10 +1,10 @@
-import { ProjectProvider } from './context/ProjectContext';
-import Dashboard from './pages/Dashboard';
-import {Routes, Route} from "react-router-dom";
-import {NewSecret} from "./pages/NewSecret.tsx";
-import {NewProject} from "./pages/NewProject.tsx";
-import {ActivityContextProvider} from "./context/ActivityContext.tsx";
-import {AppGlobalContextProvider} from "./context/AppGlobalContext.tsx";
+import { ProjectProvider } from "./context/ProjectContext";
+import Dashboard from "./pages/Dashboard";
+import { Routes, Route } from "react-router-dom";
+import { NewSecret } from "./pages/NewSecret.tsx";
+import { NewProject } from "./pages/NewProject.tsx";
+import { ActivityContextProvider } from "./context/ActivityContext.tsx";
+import { AppGlobalContextProvider } from "./context/AppGlobalContext.tsx";
 
 // TODO: Unify all Providers
 

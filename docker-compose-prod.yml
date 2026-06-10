@@ -6,27 +6,27 @@
 # - Enable 'db' if you do not have an external database already running.
 
 services:
-  frontend:
-    build: ./frontend
-    container_name: secretly_frontend
-    ports:
-      - "3000:80"
-    # ^ Expose the container's NGINX 80 on host's 3000
-    depends_on:
-      - backend
+    frontend:
+        build: ./frontend
+        container_name: secretly_frontend
+        ports:
+            - "3000:80"
+        # ^ Expose the container's NGINX 80 on host's 3000
+        depends_on:
+            - backend
 
-  backend:
-    build: ./secretly_api
-    container_name: secretly_backend
-    environment:
-      - API_SECRET=${API_SECRET}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_DLL_MODE=${DB_DLL_MODE}
-      - LOGGING_LEVEL=${LOGGING_LEVEL}
-    ports:
-      - "8080:8080"
+    backend:
+        build: ./secretly_api
+        container_name: secretly_backend
+        environment:
+            - API_SECRET=${API_SECRET}
+            - DB_HOST=${DB_HOST}
+            - DB_USER=${DB_USER}
+            - DB_PASS=${DB_PASS}
+            - DB_DLL_MODE=${DB_DLL_MODE}
+            - LOGGING_LEVEL=${LOGGING_LEVEL}
+        ports:
+            - "8080:8080"
 #    depends_on:
 #      - db
 #

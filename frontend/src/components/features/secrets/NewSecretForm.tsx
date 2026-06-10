@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import Button from "../../ui/Button.tsx";
-import {CircleAlert} from "lucide-react";
-import {useProject} from "../../../hooks/useProjects.tsx";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Field } from "../../ui/primitives";
+import FormShell, { FormField } from "../../ui/forms/FormShell.tsx";
+import { useProject } from "../../../hooks/useProjects.tsx";
+import { useNavigate } from "react-router-dom";
 
 const NewSecretForm: React.FC = () => {
-    const [keyName, setKeyName] = useState('');
-    const [value, setValue] = useState('');
+    const [keyName, setKeyName] = useState("");
+    const [value, setValue] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {selectedProject, addSecret} = useProject();
+    const { selectedProject, addSecret } = useProject();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!keyName.trim() || !value.trim()) {
-            setError('Both key name and value are required.');
+            setError("Both key name and value are required.");
             return;
         }
 
@@ -28,79 +28,54 @@ const NewSecretForm: React.FC = () => {
                 addSecret(selectedProject.name, { keyName: keyName, value: value });
             }
 
-            setKeyName('');
-            setValue('');
+            setKeyName("");
+            setValue("");
             navigate("/");
         } catch (err) {
-            setError('Failed to add secret. Check your connection and try again.');
-            console.error('Error adding secret:', err);
+            setError("Failed to add secret. Check your connection and try again.");
+            console.error("Error adding secret:", err);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="card p-6">
-            <form onSubmit={handleSubmit} noValidate>
-                {error && (
-                    <div role="alert" className="flex mb-5 text-red-300 text-sm p-3 bg-red-950/40 rounded-lg border border-red-900/40 items-start gap-2">
-                        <CircleAlert size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
-                        <span>{error}</span>
-                    </div>
-                )}
+        <FormShell
+            onSubmit={handleSubmit}
+            error={error}
+            submitLabel="Save Secret"
+            submittingLabel="Saving…"
+            isSubmitting={isSubmitting}
+            onCancel={() => navigate("/")}
+        >
+            <FormField htmlFor="keyName" label="Key Name" className="mb-5">
+                <Field
+                    type="text"
+                    id="keyName"
+                    name="keyName"
+                    value={keyName}
+                    onChange={(e) => setKeyName(e.target.value)}
+                    className="font-mono"
+                    placeholder="e.g. STRIPE_API_KEY…"
+                    autoComplete="off"
+                    spellCheck={false}
+                />
+            </FormField>
 
-                <div className="mb-5">
-                    <label htmlFor="keyName" className="block text-sm font-medium text-stone-300 mb-2">
-                        Key Name
-                    </label>
-                    <input
-                        type="text"
-                        id="keyName"
-                        name="keyName"
-                        value={keyName}
-                        onChange={(e) => setKeyName(e.target.value)}
-                        className="input-field font-mono"
-                        placeholder="e.g. STRIPE_API_KEY…"
-                        autoComplete="off"
-                        spellCheck={false}
-                    />
-                </div>
-
-                <div className="mb-6">
-                    <label htmlFor="value" className="block text-sm font-medium text-stone-300 mb-2">
-                        Value
-                    </label>
-                    <input
-                        type="password"
-                        id="value"
-                        name="value"
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        className="input-field font-mono"
-                        placeholder="Enter secret value…"
-                        autoComplete="off"
-                        spellCheck={false}
-                    />
-                </div>
-
-                <div className="flex justify-end gap-2">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => navigate("/")}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        type="submit"
-                        variant="primary"
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? 'Saving…' : 'Save Secret'}
-                    </Button>
-                </div>
-            </form>
-        </div>
+            <FormField htmlFor="value" label="Value">
+                <Field
+                    type="password"
+                    id="value"
+                    name="value"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="font-mono"
+                    placeholder="Enter secret value…"
+                    autoComplete="off"
+                    spellCheck={false}
+                />
+            </FormField>
+        </FormShell>
     );
 };
 

@@ -1,5 +1,5 @@
-import React, {createContext, ReactNode, useState, useEffect} from 'react';
-import {API_URL} from "../lib/constants.ts";
+import React, { createContext, ReactNode, useState, useEffect } from "react";
+import { API_URL } from "../lib/constants.ts";
 import API from "../lib/api.ts";
 
 export interface Project {
@@ -14,15 +14,15 @@ export interface Secret {
 }
 
 export interface ProjectContextType {
-    projects: Project[],
-    initialized: boolean,
-    selectedProject: Project | null,
-    setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>,
-    addProject: (project: Project) => void,
-    deleteProject: (project: Project) => void,
-    addSecret: (projectName: string, secret: Omit<Secret, 'projectName'>) => void,
-    updateSecret: (projectName: string, keyName: string, newValue: string) => void,
-    deleteSecret: (projectName: string, keyName: string) => void,
+    projects: Project[];
+    initialized: boolean;
+    selectedProject: Project | null;
+    setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>;
+    addProject: (project: Project) => void;
+    deleteProject: (project: Project) => void;
+    addSecret: (projectName: string, secret: Omit<Secret, "projectName">) => void;
+    updateSecret: (projectName: string, keyName: string, newValue: string) => void;
+    deleteSecret: (projectName: string, keyName: string) => void;
 }
 
 // Create the context
@@ -54,17 +54,18 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     };
 
     useEffect(() => {
-        fetchProjects().then(() => { setInitialized(true)})
+        fetchProjects().then(() => {
+            setInitialized(true);
+        });
     }, []);
 
     // Needed this to sync the secretList when modified
     useEffect(() => {
         if (selectedProject) {
-            const currentProject = projects.find(p => p.name === selectedProject.name);
+            const currentProject = projects.find((p) => p.name === selectedProject.name);
             if (currentProject) {
                 setSelectedProject(currentProject);
-            }
-            else if (projects.length > 0) {
+            } else if (projects.length > 0) {
                 setSelectedProject(projects[0]);
             }
         }
@@ -79,25 +80,21 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     };
 
     const deleteProject = async (project: Project) => {
-        {/* TODO: Add custom confirmation modal */}
-        const proceed = window.confirm("Are you sure you want to delete this project?");
-        if (proceed) {
-            const response = await API.delete(`/projects/${project.name}`);
-            if (response.status === 200 && response?.data.data) {
-                await fetchProjects();
-            }
+        const response = await API.delete(`/projects/${project.name}`);
+        if (response.status === 200 && response?.data.data) {
+            await fetchProjects();
         }
-    }
+    };
 
-    const addSecret = async (projectName: string, secret: Omit<Secret, 'projectName'>) => {
+    const addSecret = async (projectName: string, secret: Omit<Secret, "projectName">) => {
         const response = await API.post("/secrets/" + projectName, secret);
 
         if (response.status === 200 && response?.data.data) {
-            const updatedProjects = projects.map(project => {
+            const updatedProjects = projects.map((project) => {
                 if (project.name === projectName) {
                     return {
                         ...project,
-                        secrets: [...project.secrets, {...secret, projectName}]
+                        secrets: [...project.secrets, { ...secret, projectName }],
                     };
                 }
                 return project;
@@ -115,16 +112,16 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
         const response = await API.put(`/secrets/${projectName}/${keyName}`, updatedSecret);
 
         if (response.status === 200 && response?.data.data) {
-            const updatedProjects = projects.map(project => {
+            const updatedProjects = projects.map((project) => {
                 if (project.name === projectName) {
                     return {
                         ...project,
-                        secrets: project.secrets.map(secret => {
+                        secrets: project.secrets.map((secret) => {
                             if (secret.keyName === keyName) {
-                                return {...secret, value: newValue};
+                                return { ...secret, value: newValue };
                             }
                             return secret;
-                        })
+                        }),
                     };
                 }
                 return project;
@@ -134,37 +131,35 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
     };
 
     const deleteSecret = async (projectName: string, keyName: string) => {
-        const proceed = window.confirm("Are you sure you want to delete this project?");
-
-        if (proceed) {
-            const response = await API.delete(`/secrets/${projectName}/${keyName}`);
-            if (response.status === 200 && response?.data.data) {
-                const updatedProjects = projects.map(project => {
-                    if (project.name === projectName) {
-                        return {
-                            ...project,
-                            secrets: project.secrets.filter(secret => secret.keyName !== keyName)
-                        };
-                    }
-                    return project;
-                });
-                setProjects(updatedProjects);
-            }
+        const response = await API.delete(`/secrets/${projectName}/${keyName}`);
+        if (response.status === 200 && response?.data.data) {
+            const updatedProjects = projects.map((project) => {
+                if (project.name === projectName) {
+                    return {
+                        ...project,
+                        secrets: project.secrets.filter((secret) => secret.keyName !== keyName),
+                    };
+                }
+                return project;
+            });
+            setProjects(updatedProjects);
         }
     };
 
     return (
-        <ProjectContext.Provider value={{
-            projects,
-            initialized,
-            selectedProject,
-            setSelectedProject,
-            addProject,
-            deleteProject,
-            addSecret,
-            updateSecret,
-            deleteSecret
-        }}>
+        <ProjectContext.Provider
+            value={{
+                projects,
+                initialized,
+                selectedProject,
+                setSelectedProject,
+                addProject,
+                deleteProject,
+                addSecret,
+                updateSecret,
+                deleteSecret,
+            }}
+        >
             {children}
         </ProjectContext.Provider>
     );

@@ -25,15 +25,16 @@
 
 4. **Check Recent Activity**  
    The Recent Activity section provides a chronological log of all actions and changes made in each project, allowing you to keep track of updates and review any modifications.
+
 ---
 
 ## Installation & Setup
 
 ### Developer guide
 
-   - Run `script_build_dev.ps1`, this will start the backend server in a container, and then run `npm run dev` inside the `/frontend` directory.<br><br>
-   - For testing the (built) frontend, backend before building the images for DockerHub run `script_build_prod.ps1`.
+- Run `script_build_dev.ps1`, this will start the backend server in a container, and then run `npm run dev` inside the `/frontend` directory.<br><br>
+- For testing the (built) frontend, backend before building the images for DockerHub run `script_build_prod.ps1`.
 
 ### User guide
 
-   - Just run the `docker-compose-user.yml` file. Replace database connection variables. You can copy and paste the file contents on Coolify.
+- Just run the `docker-compose-user.yml` file. Replace database connection variables. You can copy and paste the file contents on Coolify.

@@ -1,24 +1,28 @@
+export const formatLogTime = (timestamp: string): string => {
+    return new Date(timestamp).toLocaleTimeString("en-GB", { hour12: false });
+};
+
 export const timeAgo = (timestamp: string): string => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
     if (diffInSeconds < 60) {
-        return rtf.format(-diffInSeconds, 'second');
+        return rtf.format(-diffInSeconds, "second");
     }
 
     const diffInMinutes = Math.floor(diffInSeconds / 60);
     if (diffInMinutes < 60) {
-        return rtf.format(-diffInMinutes, 'minute');
+        return rtf.format(-diffInMinutes, "minute");
     }
 
     const diffInHours = Math.floor(diffInMinutes / 60);
     if (diffInHours < 24) {
-        return rtf.format(-diffInHours, 'hour');
+        return rtf.format(-diffInHours, "hour");
     }
 
     const diffInDays = Math.floor(diffInHours / 24);
-    return rtf.format(-diffInDays, 'day');
-}
+    return rtf.format(-diffInDays, "day");
+};

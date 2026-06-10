@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import './Loader.css';
+import { FC } from "react";
+import "./Loader.css";
 
 interface LoaderProps {
     color?: string;
@@ -10,7 +10,7 @@ interface LoaderProps {
 const circleRadius = 18;
 const circleCircumference = 2 * Math.PI * circleRadius;
 
-const Loader: FC<LoaderProps> = ({ color = '#d97706', size = 40, label = 'Loading…' }) => {
+const Loader: FC<LoaderProps> = ({ color = "#ff8c2e", size = 40, label = "Loading…" }) => {
     return (
         <div role="status" aria-live="polite" className="flex flex-col items-center gap-3">
             <svg
@@ -28,7 +28,7 @@ const Loader: FC<LoaderProps> = ({ color = '#d97706', size = 40, label = 'Loadin
                     r={circleRadius}
                     fill="none"
                     stroke={color}
-                    strokeWidth={4}
+                    strokeWidth={2}
                     strokeDasharray={circleCircumference}
                 />
             </svg>

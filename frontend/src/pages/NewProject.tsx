@@ -10,12 +10,13 @@ export function NewProject() {
 
     return (
         <Layout>
-            <SectionTitle
-                hasBackButton={true}
-                title="Create Project"
-                subtitle="Organize your secrets into a dedicated, encrypted vault."
-            />
             <div className="form-shell">
+                <SectionTitle
+                    hasBackButton={true}
+                    eyebrow="New vault"
+                    title="Create Project"
+                    subtitle="Organize your secrets into a dedicated, encrypted vault."
+                />
                 <NewProjectForm />
             </div>
         </Layout>

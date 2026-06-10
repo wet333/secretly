@@ -1,32 +1,33 @@
-import React, {Context, createContext, ReactNode, useState} from "react";
+import React, { Context, createContext, ReactNode, useState } from "react";
 
 export interface AppGlobalContextType {
-    isModalVisible: boolean,
-    toggleModalVisibility: () => void,
+    isModalVisible: boolean;
+    toggleModalVisibility: () => void;
 }
 
-export const AppGlobalContext: Context<AppGlobalContextType | undefined> = createContext<AppGlobalContextType | undefined>(
-    undefined
-);
+export const AppGlobalContext: Context<AppGlobalContextType | undefined> = createContext<
+    AppGlobalContextType | undefined
+>(undefined);
 
 interface AppGlobalContextProviderProps {
     children: ReactNode;
 }
 
-export const AppGlobalContextProvider: React.FC<AppGlobalContextProviderProps> = ({children}) => {
-
-    const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false);
+export const AppGlobalContextProvider: React.FC<AppGlobalContextProviderProps> = ({ children }) => {
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
     const toggleModalVisibility = () => {
-        setIsModalVisible(!isModalVisible)
-    }
+        setIsModalVisible(!isModalVisible);
+    };
 
     return (
-        <AppGlobalContext.Provider value={{
-            isModalVisible: isModalVisible,
-            toggleModalVisibility,
-        }}>
+        <AppGlobalContext.Provider
+            value={{
+                isModalVisible: isModalVisible,
+                toggleModalVisibility,
+            }}
+        >
             {children}
         </AppGlobalContext.Provider>
-    )
-}
+    );
+};

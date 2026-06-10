@@ -1,6 +1,6 @@
-import React from 'react';
-import ProjectListItem from './ProjectListItem.tsx';
-import {Project} from "../../../context/ProjectContext.tsx";
+import React from "react";
+import ProjectListItem from "./ProjectListItem.tsx";
+import { Project } from "../../../context/ProjectContext.tsx";
 
 interface ProjectListProps {
     projects: Project[];
