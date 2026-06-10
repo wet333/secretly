@@ -28,19 +28,23 @@ const ProjectBanner: React.FC<ProjectBannerProps> = ({ project, secretCount, onD
                     {secretCount} {secretCount === 1 ? "secret" : "secrets"} {"stored"}
                 </p>
             </div>
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="grid grid-cols-2 gap-2.5 w-full sm:flex sm:w-auto sm:shrink-0">
                 <Button
                     variant="dangerOutline"
                     size="md"
+                    fullWidth
+                    className="sm:w-auto"
                     icon={<Trash2 size={14} aria-hidden="true" />}
                     onClick={onDelete}
                 >
                     Delete
                 </Button>
-                <Link to="/addSecret">
+                <Link to="/addSecret" className="min-w-0">
                     <Button
                         variant="primary"
                         size="md"
+                        fullWidth
+                        className="sm:w-auto"
                         icon={<Plus size={14} aria-hidden="true" />}
                         iconPosition="left"
                     >

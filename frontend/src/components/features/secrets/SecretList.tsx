@@ -75,36 +75,18 @@ const SecretList: React.FC<SecretsListProps> = ({ secrets, count }) => {
                     description={<>No secrets match &ldquo;{filterQuery}&rdquo;</>}
                 />
             ) : (
-                <div className="overflow-x-auto">
-                    <table className="secrets-table">
-                        <colgroup>
-                            <col className="col-key" />
-                            <col className="col-value" />
-                            <col className="col-actions" />
-                        </colgroup>
-                        <thead>
-                            <tr className="table-head">
-                                <th scope="col" className="py-2.5 px-4 text-left">
-                                    <Eyebrow>Key Name</Eyebrow>
-                                </th>
-                                <th scope="col" className="py-2.5 px-4 text-left">
-                                    <Eyebrow>Value</Eyebrow>
-                                </th>
-                                <th scope="col" className="py-2.5 px-4 text-right">
-                                    <span className="sr-only">Actions</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-line">
-                            {filteredSecrets.map((secret) => (
-                                <SecretListItem
-                                    key={`${secret.projectName}-${secret.keyName}`}
-                                    secret={secret}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <ul className="secrets-list">
+                    <li className="secrets-list__head" aria-hidden="true">
+                        <Eyebrow>Key Name</Eyebrow>
+                        <Eyebrow>Value</Eyebrow>
+                        <span className="sr-only">Actions</span>
+                    </li>
+                    {filteredSecrets.map((secret) => (
+                        <li key={`${secret.projectName}-${secret.keyName}`}>
+                            <SecretListItem secret={secret} />
+                        </li>
+                    ))}
+                </ul>
             )}
         </Panel>
     );

@@ -82,15 +82,14 @@ const SecretListItem: React.FC<SecretListItemProps> = ({ secret }) => {
                     cannot be undone.
                 </ConfirmDialog>
             )}
-            <tr className="group table-row-hover">
-                <td className="py-3 px-4 min-w-0">
-                    <div className="font-mono text-sm font-semibold text-pri break-words">
-                        {secret.keyName}
-                    </div>
-                </td>
-                <td className="py-3 px-4 min-w-0">
+            <article className="secret-row group" aria-label={secret.keyName}>
+                <div className="secret-row__key min-w-0">
+                    <h3 className="secret-row__key-name">{secret.keyName}</h3>
+                </div>
+
+                <div className="secret-row__value min-w-0">
                     {isEditable ? (
-                        <div className="flex items-center gap-2 min-w-0">
+                        <div className="secret-row__edit flex items-center gap-2 min-w-0">
                             <Field
                                 type="text"
                                 name="secret-value-edit"
@@ -116,55 +115,55 @@ const SecretListItem: React.FC<SecretListItemProps> = ({ secret }) => {
                         </div>
                     ) : (
                         <span
-                            className={`min-w-0 truncate ${isVisible ? "secret-value" : "secret-mask"}`}
+                            className={`secret-row__value-display min-w-0 ${isVisible ? "secret-value" : "secret-mask"}`}
+                            aria-live={isCopied ? "polite" : undefined}
                         >
-                            {isVisible ? secret.value : "••••••••••••••••••••••"}
+                            {isVisible ? secret.value : "••••••••••••"}
                         </span>
                     )}
-                </td>
-                <td className="py-3 px-4 text-right w-[8.5rem]">
-                    {!isEditable && (
-                        <div className="flex items-center justify-end gap-0.5 opacity-80 group-hover:opacity-100 transition-opacity duration-150">
-                            <Button
-                                variant="icon"
-                                aria-label={isVisible ? "Hide secret value" : "Reveal secret value"}
-                                icon={
-                                    isVisible ? (
-                                        <EyeOff size={16} aria-hidden="true" />
-                                    ) : (
-                                        <Eye size={16} aria-hidden="true" />
-                                    )
-                                }
-                                onClick={toggleVisibility}
-                            />
-                            <Button
-                                variant="icon"
-                                aria-label={isCopied ? "Copied" : "Copy secret value"}
-                                icon={
-                                    isCopied ? (
-                                        <Check size={16} className="text-ok" aria-hidden="true" />
-                                    ) : (
-                                        <Copy size={16} aria-hidden="true" />
-                                    )
-                                }
-                                onClick={copyValue}
-                            />
-                            <Button
-                                variant="icon"
-                                aria-label="Edit secret"
-                                icon={<Edit size={16} aria-hidden="true" />}
-                                onClick={toggleEditable}
-                            />
-                            <Button
-                                variant="icon"
-                                aria-label="Delete secret"
-                                icon={<Trash2 size={16} aria-hidden="true" />}
-                                onClick={() => setShowDeleteConfirm(true)}
-                            />
-                        </div>
-                    )}
-                </td>
-            </tr>
+                </div>
+
+                {!isEditable && (
+                    <div className="secret-row__actions">
+                        <Button
+                            variant="icon"
+                            aria-label={isVisible ? "Hide secret value" : "Reveal secret value"}
+                            icon={
+                                isVisible ? (
+                                    <EyeOff size={16} aria-hidden="true" />
+                                ) : (
+                                    <Eye size={16} aria-hidden="true" />
+                                )
+                            }
+                            onClick={toggleVisibility}
+                        />
+                        <Button
+                            variant="icon"
+                            aria-label={isCopied ? "Copied" : "Copy secret value"}
+                            icon={
+                                isCopied ? (
+                                    <Check size={16} className="text-ok" aria-hidden="true" />
+                                ) : (
+                                    <Copy size={16} aria-hidden="true" />
+                                )
+                            }
+                            onClick={copyValue}
+                        />
+                        <Button
+                            variant="icon"
+                            aria-label="Edit secret"
+                            icon={<Edit size={16} aria-hidden="true" />}
+                            onClick={toggleEditable}
+                        />
+                        <Button
+                            variant="icon"
+                            aria-label="Delete secret"
+                            icon={<Trash2 size={16} aria-hidden="true" />}
+                            onClick={() => setShowDeleteConfirm(true)}
+                        />
+                    </div>
+                )}
+            </article>
         </>
     );
 };
