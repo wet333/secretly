@@ -1,0 +1,84 @@
+# VPS deployment behind the Traefik reverse proxy (HTTPS).
+# See: https://github.com/wet333/Infrastructure (VPS/traefik-proxy)
+#
+# Requirements on the VPS:
+#   - Traefik running and the external network created: docker network create traefik-net
+#   - DNS A records for FRONTEND_HOST and API_HOST pointing to the VPS IP
+#   - A '.env' file next to this compose (copy devops/example.deploy.env)
+#
+# Run with:
+#   docker compose -f docker-compose.traefik.yml up -d
+#
+# Note: no ports are published on the host; Traefik reaches the containers
+# through 'traefik-net' and terminates TLS with Let's Encrypt.
+
+services:
+    frontend:
+        image: "wetagustin/secretly_frontend:${VERSION:-latest}"
+        container_name: secretly-frontend
+        restart: always
+        environment:
+            # The browser calls the API through its public HTTPS hostname
+            - API_URL=https://${API_HOST}/api/
+        networks:
+            - traefik-net
+        depends_on:
+            - backend
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.secretly-frontend.rule=Host(`${FRONTEND_HOST}`)"
+            - "traefik.http.routers.secretly-frontend.entrypoints=websecure"
+            - "traefik.http.routers.secretly-frontend.tls.certresolver=le-resolver"
+            - "traefik.http.services.secretly-frontend.loadbalancer.server.port=80"
+
+    backend:
+        image: "wetagustin/secretly_api:${VERSION:-latest}"
+        container_name: secretly-backend
+        restart: always
+        environment:
+            - API_SECRET=${API_SECRET:?set API_SECRET}
+            - DB_HOST=${DB_HOST:?set DB_HOST}
+            - DB_NAME=${DB_NAME:-secretly}
+            - DB_USER=${DB_USER:-secretly}
+            - DB_PASS=${DB_PASS:?set DB_PASS}
+            - DB_DLL_MODE=${DB_DLL_MODE:-update}
+            - LOGGING_LEVEL=${LOGGING_LEVEL:-INFO}
+            # CORS allows the frontend public hostname
+            - CORS_HOST=${FRONTEND_HOST}
+        networks:
+            - traefik-net
+            - secretly-internal
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.secretly-api.rule=Host(`${API_HOST}`)"
+            - "traefik.http.routers.secretly-api.entrypoints=websecure"
+            - "traefik.http.routers.secretly-api.tls.certresolver=le-resolver"
+            - "traefik.http.services.secretly-api.loadbalancer.server.port=8080"
+
+    # Optional bundled PostgreSQL. Uncomment this service and the volume below
+    # if you don't have an external database, and set DB_HOST=db in your .env.
+#    db:
+#        image: postgres:16
+#        container_name: secretly-db
+#        restart: always
+#        environment:
+#            POSTGRES_USER: ${DB_USER:-secretly}
+#            POSTGRES_PASSWORD: ${DB_PASS:?set DB_PASS}
+#            POSTGRES_DB: ${DB_NAME:-secretly}
+#        volumes:
+#            - postgres_data:/var/lib/postgresql/data
+#        networks:
+#            - secretly-internal
+#        healthcheck:
+#            test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-secretly} -d ${DB_NAME:-secretly}"]
+#            interval: 5s
+#            timeout: 5s
+#            retries: 5
+
+networks:
+    secretly-internal:
+    traefik-net:
+        external: true
+
+#volumes:
+#    postgres_data:

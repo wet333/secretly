@@ -1,7 +1,7 @@
 # ------------------------------------------------
 # Stage 1: Build the Vite + React app with Node
 # ------------------------------------------------
-FROM node:18 AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
@@ -15,7 +15,7 @@ RUN npm run build
 # ------------------------------------------------
 # Stage 2: Serve with NGINX
 # ------------------------------------------------
-FROM nginx:1.23-alpine
+FROM nginx:alpine
 
 # Install envsubst
 RUN apk add --no-cache gettext

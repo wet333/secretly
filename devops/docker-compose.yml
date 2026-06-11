@@ -1,0 +1,64 @@
+# Standalone deployment using the public DockerHub images.
+# Copy this file, adjust the environment variables and run:
+#
+#   docker compose up -d
+#
+# Frontend: http://YOUR_HOST:9000
+# API:      http://YOUR_HOST:9001/api/
+#
+# By default it expects an external PostgreSQL database. If you don't
+# have one, uncomment the 'db' service and the 'volumes' section below.
+
+services:
+    frontend:
+        image: "wetagustin/secretly_frontend:${VERSION:-latest}"
+        container_name: secretly_frontend
+        restart: unless-stopped
+        environment:
+            # Public URL of the API as seen from the user's browser.
+            # Use your host IP or domain, NOT the docker service name.
+            - API_URL=http://YOUR_HOST_IP:${API_PORT:-9001}/api/
+        ports:
+            - "${FRONTEND_PORT:-9000}:80"
+        depends_on:
+            - backend
+
+    backend:
+        image: "wetagustin/secretly_api:${VERSION:-latest}"
+        container_name: secretly_backend
+        restart: unless-stopped
+        environment:
+            # Private key used to encrypt/decrypt secrets. Change it!
+            - API_SECRET=${API_SECRET:?set API_SECRET}
+            # PostgreSQL connection. Use 'db' if you enable the bundled database.
+            - DB_HOST=${DB_HOST:-db}
+            - DB_NAME=${DB_NAME:-secretly}
+            - DB_USER=${DB_USER:-secretly}
+            - DB_PASS=${DB_PASS:?set DB_PASS}
+            # Hibernate schema mode: 'update' for an existing/new persistent DB,
+            # 'create-drop' only for throwaway databases.
+            - DB_DLL_MODE=${DB_DLL_MODE:-update}
+            - LOGGING_LEVEL=${LOGGING_LEVEL:-INFO}
+            # Host of the frontend allowed by CORS (no protocol, no port).
+            - CORS_HOST=${CORS_HOST:?set CORS_HOST}
+        ports:
+            - "${API_PORT:-9001}:8080"
+
+#    db:
+#        image: postgres:16
+#        container_name: secretly_db
+#        restart: unless-stopped
+#        environment:
+#            POSTGRES_USER: ${DB_USER:-secretly}
+#            POSTGRES_PASSWORD: ${DB_PASS:?set DB_PASS}
+#            POSTGRES_DB: ${DB_NAME:-secretly}
+#        volumes:
+#            - postgres_data:/var/lib/postgresql/data
+#        healthcheck:
+#            test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-secretly} -d ${DB_NAME:-secretly}"]
+#            interval: 5s
+#            timeout: 5s
+#            retries: 5
+#
+#volumes:
+#    postgres_data:

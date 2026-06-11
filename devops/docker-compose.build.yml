@@ -1,10 +1,31 @@
+# Local build stack: builds both images from source and runs the
+# full system (frontend + API + PostgreSQL). Used to validate the
+# production build before publishing images to DockerHub.
+#
+#   ./devops/scripts/prod-local.sh
+#
+# Frontend: http://localhost:3000
+# API:      http://localhost:8080/api/
+
+name: secretly-prod
+
 services:
+    frontend:
+        build: ../frontend
+        container_name: secretly_prod_frontend
+        environment:
+            - API_URL=http://localhost:8080/api/
+        ports:
+            - "3000:80"
+        depends_on:
+            - backend
+
     backend:
-        build: ./secretly_api
-        container_name: secretly_backend
+        build: ../secretly_api
+        container_name: secretly_prod_backend
         environment:
             - API_SECRET=${API_SECRET}
-            - DB_HOST=${DB_HOST}
+            - DB_HOST=db
             - DB_NAME=${DB_NAME}
             - DB_USER=${DB_USER}
             - DB_PASS=${DB_PASS}
@@ -19,15 +40,13 @@ services:
 
     db:
         image: postgres:16
-        container_name: secretly_db
+        container_name: secretly_prod_db
         environment:
             POSTGRES_USER: ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASS}
             POSTGRES_DB: ${DB_NAME}
         volumes:
             - postgres_data:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
             interval: 5s
